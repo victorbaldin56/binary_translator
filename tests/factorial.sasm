@@ -1,0 +1,17 @@
+jmp 58
+pop rax
+push rax
+push rax
+push 1
+je 55
+push rax -1
+call 9
+mul
+pop rax
+push rax
+ret
+in
+pop rax
+push rax 1
+call 9
+out
