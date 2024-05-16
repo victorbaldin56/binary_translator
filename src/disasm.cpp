@@ -13,20 +13,28 @@
 #include <cstring>
 
 #include "buffer_file.h"
+#include "x86-64.h"
+
+#define DEBUG
+
+#ifdef DEBUG
+#define ON_DEBUG(x) x
+#else
+#define ON_DEBUG(x)
+#endif
 
 #define ARRAY_SIZE(x) sizeof(x) / sizeof(x[0])
 
 namespace {
 
+using trans::Immed;
+using trans::Reg;
+using trans::instrMappings;
+
 enum DisasmStatus {
     Proceeding,
     Halt,
     Error,
-};
-
-enum OperandMask {
-    Immed = 0x20,
-    Reg = 0x40,
 };
 
 const unsigned char OpcodeMask = 0x1f;
@@ -37,39 +45,12 @@ const unsigned char HaltInstruction = 0x10;
 const std::int64_t signature = 0x1156414223;
 const unsigned signatureSize = 5;
 
-const disasm::SPUInstruction SPUInstructionSet[] = {
-    {"in"  ,           0},
-    {"out" ,           0},
-    {"push", Immed | Reg},
-    {"add" ,           0},
-    {"sub" ,           0},
-    {"mul" ,           0},
-    {"div" ,           0},
-    {"sqrt",           0},
-    {"pop" ,         Reg},
-    {"jmp" , Immed | Reg},
-    {"jae" , Immed | Reg},
-    {"jbe" , Immed | Reg},
-    {"ja"  , Immed | Reg},
-    {"jb"  , Immed | Reg},
-    {"je"  , Immed | Reg},
-    {"call", Immed | Reg},
-    {"hlt" ,           0},
-    {"ret" ,           0}};
-
-const char* const Registers[] = {
-    nullptr,
-    "rax",
-    "rbx",
-    "rcx",
-    "rdx"};
-
 // -------------------------------------------------------------------
 
 inline bool checkSignature(buffer_file::Buffer* buffer) {
     assert(buffer);
 
-    if (buffer->len <= sizeof(int32_t) ||
+    if (buffer->len <= signatureSize ||
         (std::memcmp(buffer->buf, &signature, signatureSize) != 0))
         return false;
 
@@ -77,23 +58,31 @@ inline bool checkSignature(buffer_file::Buffer* buffer) {
     return true;
 }
 
-DisasmStatus disassembleFromCurrent(buffer_file::Buffer* buffer, FILE* output) {
+DisasmStatus disassembleOnCurrent(buffer_file::Buffer* buffer,
+                                  ON_DEBUG(std::FILE* output),
+                                  ir::IR* ir) {
     assert(buffer && output);
+    assert(ir);
 
     unsigned char fullOpcode = buffer->buf[buffer->pos++];
     unsigned char opcode = fullOpcode & OpcodeMask;
+    std::size_t pos = buffer->pos;
+
+    ir::Operand firstOp = {.type_ = ir::Operand::Empty};
+    ir::Operand secondOp = {.type_ = ir::Operand::Empty};
+
     if (opcode == HaltInstruction)
         return Halt;
 
-    if (opcode >= ARRAY_SIZE(SPUInstructionSet)) {
+    if (opcode >= ARRAY_SIZE(instrMappings)) {
         std::fprintf(stderr, "Invalid opcode\n");
         return Error;
     }
 
-    std::fprintf(output, "%s", SPUInstructionSet[opcode].name);
+    ON_DEBUG(std::fprintf(output, "%s", instrMappings[opcode].name));
 
     if (fullOpcode & Reg) {
-        if (!(SPUInstructionSet[opcode].operandTypes & Reg)) {
+        if (!(instrMappings[opcode].operandTypes & Reg)) {
             std::fprintf(stderr, "Invalid operand type\n");
             return Error;
         }
@@ -105,16 +94,18 @@ DisasmStatus disassembleFromCurrent(buffer_file::Buffer* buffer, FILE* output) {
 
         unsigned char regNum = buffer->buf[buffer->pos++];
 
-        if (regNum == 0 || regNum > ARRAY_SIZE(Registers)) {
+        if (regNum == 0 || regNum > ARRAY_SIZE(trans::regMappings)) {
             std::fprintf(stderr, "Invalid register\n");
             return Error;
         }
 
-        std::fprintf(output, " %s", Registers[regNum]);
+        ON_DEBUG(std::fprintf(output, " %s", trans::regMappings[regNum].nameInSPU));
+        firstOp.type_ = ir::Operand::Reg;
+        firstOp.data_ = {.regNum_ = regNum};
     }
 
     if (fullOpcode & Immed) {
-        if (!(SPUInstructionSet[opcode].operandTypes & Immed)) {
+        if (!(instrMappings[opcode].operandTypes & Immed)) {
             std::fprintf(stderr, "Invalid operand type\n");
             return Error;
         }
@@ -127,17 +118,26 @@ DisasmStatus disassembleFromCurrent(buffer_file::Buffer* buffer, FILE* output) {
 
         // Get double by misaligned address
         std::memcpy(&imm, &buffer->buf[buffer->pos], sizeof(imm));
-        std::fprintf(output, " %lg", imm);
-
+        ON_DEBUG(std::fprintf(output, " %lg", imm));
+        if (firstOp.type_ == ir::Operand::Reg) {
+            secondOp.type_ = ir::Operand::Immed;
+            secondOp.data_ = {.immed_ = imm};
+        } else {
+            firstOp.type_ = ir::Operand::Reg;
+            firstOp.data_ = {.immed_ = imm};
+        }
 
         buffer->pos += sizeof(imm);
     }
 
-    std::fprintf(output, "\n");
+    ON_DEBUG(std::fprintf(output, "\n"));
+    // save pointer to node for future iterations
+    ir::insertIRNodeBack(ir, opcode, firstOp, secondOp, pos);
     return Proceeding;
 }
 
-bool disassembleSPUCode(buffer_file::Buffer* buffer, FILE* output) {
+bool disassembleSPUCode(buffer_file::Buffer* buffer,
+                        ON_DEBUG(std::FILE* output), ir::IR* ir) {
     assert(buffer && output);
 
     if (!checkSignature(buffer)) {
@@ -146,7 +146,7 @@ bool disassembleSPUCode(buffer_file::Buffer* buffer, FILE* output) {
     }
 
     while (buffer->pos < buffer->len) {
-        switch (disassembleFromCurrent(buffer, output)) {
+        switch (disassembleOnCurrent(buffer, ON_DEBUG(output), ir)) {
         case Proceeding:
             break;
         case Halt:
@@ -163,34 +163,37 @@ bool disassembleSPUCode(buffer_file::Buffer* buffer, FILE* output) {
 
 }
 
-bool disasm::disassemble(Arguments args) {
+ir::IR* disasm::disassemble(trans::Arguments args) {
     assert(args.inputFile);
     assert(args.outputFile);
-
-    bool isDisassembled = true;
 
     buffer_file::Buffer* inputBuffer =
         buffer_file::createBuffer(args.inputFile);
     if (!inputBuffer)
-        return false;
+        return nullptr;
 
-    FILE* output = std::fopen(args.outputFile, "w");
+    ir::IR* ir = ir::createIR(inputBuffer->len);
+
+#ifdef DEBUG
+    std::FILE* output = std::fopen(args.outputFile, "w");
     if (!output) {
         std::fprintf(stderr,
                      "Failed to open %s: %s\n",
                      args.outputFile, std::strerror(errno));
-        isDisassembled = false;
+        goto cleanup;
+    }
+#endif
+
+    if (!disassembleSPUCode(inputBuffer, ON_DEBUG(output), ir)) {
+        // std::remove(args.outputFile);
         goto cleanup;
     }
 
-    if (!disassembleSPUCode(inputBuffer, output)) {
-        // std::remove(args.outputFile);
-        isDisassembled = false;
-    }
-
     std::fclose(output);
+    return ir;
 
 cleanup:
+    ir::destroyIR(ir);
     buffer_file::freeBuffer(inputBuffer);
-    return isDisassembled;
+    return ir;
 }

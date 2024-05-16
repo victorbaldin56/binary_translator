@@ -8,20 +8,11 @@
 #ifndef BINARY_TRANSLATOR_DISASM_H_
 #define BINARY_TRANSLATOR_DISASM_H_
 
+#include "ir.h"
+#include "trans.h"
 namespace disasm {
 
-struct Arguments {
-    const char* inputFile;
-    const char* outputFile;
-    bool verbose;
-};
-
-struct SPUInstruction {
-    const char* name;
-    unsigned char operandTypes;
-};
-
-bool disassemble(Arguments args);
+ir::IR* disassemble(trans::Arguments args);
 
 }
 

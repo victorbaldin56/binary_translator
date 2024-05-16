@@ -11,7 +11,7 @@
 
 #include <getopt.h>
 
-#include "disasm.h"
+#include "trans.h"
 
 namespace {
 
@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
                               {"output", required_argument, 0, 'o'},
                               {0, 0, 0, 0}};
 
-    disasm::Arguments args = {.outputFile = "disassembled.sasm"};
+    trans::Arguments args = {.outputFile = "disassembled.sasm"};
 
     opterr = 0;
 
@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    if (!disasm::disassemble(args))
+    if (!trans::translate(args))
         return EXIT_FAILURE;
     return 0;
 }
