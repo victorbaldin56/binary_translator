@@ -106,7 +106,8 @@ DEF(push) {
     } else {
         std::int64_t immed = 0;
         std::memcpy(&immed, &node->firstOp_.data_.immed_, sizeof(immed));
-        INSERT_NEW_INSTRUCTION(push, {Immed, {immed}});
+        INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}}, {Immed, {immed}});
+        INSERT_NEW_INSTRUCTION(push, {Reg, {.reg_ = rax}});
     }
 
     return true;

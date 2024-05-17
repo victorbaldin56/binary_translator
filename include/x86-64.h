@@ -56,7 +56,7 @@ struct Instr {
 };
 
 struct InstrArray {
-    Instr** oldAddrToNew_;
+    std::size_t* oldAddrToNew_;
     std::size_t bufLen_;
 
     Instr* data_;
@@ -70,7 +70,7 @@ inline bool createInstrArray(InstrArray* arr, std::size_t bufLen) {
     assert(arr);
 
     arr->oldAddrToNew_
-        = (Instr**)std::calloc(bufLen, sizeof(*arr->oldAddrToNew_));
+        = (std::size_t*)std::calloc(bufLen, sizeof(*arr->oldAddrToNew_));
     arr->data_ = (Instr*)std::calloc(1, sizeof(*arr->data_));
     arr->sz_ = arr->curAddr_ = 0;
     arr->cap_ = 1;
@@ -112,15 +112,41 @@ inline bool pushNewInstr(InstrArray* arr,
             return false;
     }
 
-    if (x86_64::addsd <= opcode)
-        arr->curAddr_ += 3;     // For SSE instructions
-    else
-        arr->curAddr_ += 1;
-
     arr->data_[arr->sz_++] = {.opcode_ = opcode,
                               .lhs_ = lhs, .rhs_ = rhs,
+                              .absOffset_ = arr->curAddr_,
                               .disasmFileOffset_ = node->disasmPos_};
-    arr->oldAddrToNew_[node->addr_] = arr->data_ + arr->sz_ - 1;
+    arr->oldAddrToNew_[node->addr_] = arr->sz_ - 1;
+
+    // SSE instructions
+    if (addsd <= opcode) {
+        if (opcode == movsd)
+            arr->curAddr_ += 5;
+        else
+            arr->curAddr_ += 4;
+    } else {
+        if (opcode == jmp)
+            arr->curAddr_ += 5;
+
+        if (ja <= opcode && opcode <= je)
+            arr->curAddr_ += 6;
+
+        if (opcode == call) {
+            if (lhs.type_ == Reg)
+                arr->curAddr_ += 2;
+            else
+                arr->curAddr_ += 5;
+        }
+
+        if (opcode == add || opcode == sub)
+            arr->curAddr_ += 2;
+
+        if (opcode == ret || opcode == push)
+            arr->curAddr_ += 1;
+
+        if (opcode == mov)
+            arr->curAddr_ += 9;
+    }
 
     return true;
 }

@@ -43,7 +43,8 @@ const unsigned char OpcodeMask = 0x1f;
 
 const unsigned char HaltInstruction = 0x10;
 const std::int64_t signature = 0x1156414223;
-const unsigned signatureSize = 5;
+
+using disasm::signatureSize;
 
 // -------------------------------------------------------------------
 
@@ -64,9 +65,9 @@ DisasmStatus disassembleOnCurrent(buffer_file::Buffer* buffer,
     assert(buffer);
     assert(ir);
 
+    std::size_t pos = buffer->pos;
     unsigned char fullOpcode = buffer->buf[buffer->pos++];
     unsigned char opcode = fullOpcode & OpcodeMask;
-    std::size_t pos = buffer->pos;
 
     ir::Operand firstOp = {.type_ = ir::Operand::Empty};
     ir::Operand secondOp = {.type_ = ir::Operand::Empty};

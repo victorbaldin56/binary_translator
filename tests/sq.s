@@ -5,14 +5,15 @@ section .text
 _start:
 
     ; jmp 76
-    jmp 0x4c
+    jmp 0x142
 
     ; push rbx
     sub rsp, 0x8
     movsd [rsp], xmm3
 
     ; push 0
-    push 0x0
+    mov rax, 0x0
+    push rax
 
     ; je 187
     movsd xmm0, [rsp]
@@ -20,10 +21,11 @@ _start:
     movsd xmm1, [rsp]
     add rsp, 0x8
     comisd xmm0, xmm1
-    je 0xbb
+    je 0xffffffd8
 
     ; push 0
-    push 0x0
+    mov rax, 0x0
+    push rax
 
     ; push rcx
     sub rsp, 0x8
@@ -53,14 +55,14 @@ _start:
 
     ; out
     sub rsp, 0x8
-    mov rdi, 0x560fa87572c0
+    mov rdi, 0x745904c0
     movsd xmm0, [rsp]
     add rsp, 0x8
-    mov rax, 0x560fa8687330
+    mov rax, 0x744be330
     call rax
 
     ; jmp 187
-    jmp 0xbb
+    jmp 0xffffff6b
 
     ; push rbx
     sub rsp, 0x8
@@ -97,7 +99,8 @@ _start:
     movsd [rsp], xmm0
 
     ; push 4
-    push 0x4010000000000000
+    mov rax, 0x0
+    push rax
 
     ; mul
     movsd xmm0, [rsp]
@@ -122,9 +125,9 @@ _start:
 
     ; in
     sub rsp, 0x8
-    mov rdi, 0x560fa87572c0
+    mov rdi, 0x745904c0
     mov rsi, rsp
-    mov rax, 0x560fa8687330
+    mov rax, 0x744be330
     call rax
 
     ; pop rax
@@ -133,9 +136,9 @@ _start:
 
     ; in
     sub rsp, 0x8
-    mov rdi, 0x560fa87572c0
+    mov rdi, 0x745904c0
     mov rsi, rsp
-    mov rax, 0x560fa8687330
+    mov rax, 0x744be330
     call rax
 
     ; pop rbx
@@ -144,9 +147,9 @@ _start:
 
     ; in
     sub rsp, 0x8
-    mov rdi, 0x560fa87572c0
+    mov rdi, 0x745904c0
     mov rsi, rsp
-    mov rax, 0x560fa8687330
+    mov rax, 0x744be330
     call rax
 
     ; pop rcx
@@ -158,7 +161,8 @@ _start:
     movsd [rsp], xmm2
 
     ; push 0
-    push 0x0
+    mov rax, 0x0
+    push rax
 
     ; je 9
     movsd xmm0, [rsp]
@@ -166,10 +170,10 @@ _start:
     movsd xmm1, [rsp]
     add rsp, 0x8
     comisd xmm0, xmm1
-    je 0x9
+    je 0xfffffe4d
 
     ; call 54
-    call 0x36
+    call 0xfffffedc
 
     ; pop rdx
     movsd xmm5, [rsp]
@@ -180,7 +184,8 @@ _start:
     movsd [rsp], xmm5
 
     ; push 0
-    push 0x0
+    mov rax, 0x0
+    push rax
 
     ; ja 187
     movsd xmm0, [rsp]
@@ -188,7 +193,7 @@ _start:
     movsd xmm1, [rsp]
     add rsp, 0x8
     comisd xmm0, xmm1
-    ja 0xbb
+    ja 0xfffffe11
 
     ; push rdx
     sub rsp, 0x8
@@ -212,7 +217,8 @@ _start:
     movsd [rsp], xmm3
 
     ; push -1
-    push 0xbff0000000000000
+    mov rax, 0x0
+    push rax
 
     ; mul
     movsd xmm0, [rsp]
@@ -241,7 +247,8 @@ _start:
     movsd [rsp], xmm0
 
     ; push 2
-    push 0x4000000000000000
+    mov rax, 0x0
+    push rax
 
     ; push rax
     sub rsp, 0x8
@@ -275,10 +282,10 @@ _start:
 
     ; out
     sub rsp, 0x8
-    mov rdi, 0x560fa87572c0
+    mov rdi, 0x745904c0
     movsd xmm0, [rsp]
     add rsp, 0x8
-    mov rax, 0x560fa8687330
+    mov rax, 0x744be330
     call rax
 
     ; push rcx
@@ -313,10 +320,10 @@ _start:
 
     ; out
     sub rsp, 0x8
-    mov rdi, 0x560fa87572c0
+    mov rdi, 0x745904c0
     movsd xmm0, [rsp]
     add rsp, 0x8
-    mov rax, 0x560fa8687330
+    mov rax, 0x744be330
     call rax
 
     mov rax, 0x3c

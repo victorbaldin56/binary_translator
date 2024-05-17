@@ -47,10 +47,14 @@ inline void printRegister(x86_64::Register reg, std::FILE* fp) {
 
 }
 
-inline void printOperand(x86_64::Instr::Operand op, std::FILE* fp) {
-    if (op.type_ == x86_64::Immed)
-        fprintf(fp, "0x%lx", op.qword_);
-    else if (op.type_ == x86_64::Reg)
+inline void printOperand(x86_64::Instr::Operand op, std::FILE* fp,
+                         bool asDword = true) {
+    if (op.type_ == x86_64::Immed) {
+        if (asDword)
+            fprintf(fp, "0x%x", (std::int32_t)op.qword_);
+        else
+            fprintf(fp, "0x%lx", op.qword_);
+    } else if (op.type_ == x86_64::Reg)
         printRegister(op.reg_, fp);
     else if (op.type_ == x86_64::Mem) {
         fprintf(fp, "[");
@@ -83,7 +87,12 @@ void dumpInstruction(x86_64::Instr instr, std::FILE* fp, std::FILE* disasm) {
 
     if (instr.rhs_.type_ != x86_64::Empty) {
         fprintf(fp, ", ");
-        printOperand(instr.rhs_, fp);
+        if (instr.opcode_ == x86_64::mov)
+            printOperand(instr.rhs_, fp);
+
+        // else, print immed as qword
+        else
+            printOperand(instr.rhs_, fp, true);
     }
 
     std::fprintf(fp, "\n");
