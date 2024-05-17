@@ -38,6 +38,7 @@ struct Node {
     Node* next_;             ///< Next node
 
     std::uint64_t addr_;
+    long disasmPos_;         ///< Position in disassembly file to associate with
 };
 
 /** @brief Forward-declaration to hide implementation details. */
@@ -51,12 +52,11 @@ void destroyIR(IR* self);
 
 Node* insertIRNode(IR* self, Node* node, unsigned instrNumber,
                    Operand firstOp, Operand secondOp,
-                   std::uint64_t addr);
+                   std::uint64_t addr, long tmpOffset);
 Node* insertIRNodeBack(IR* self, unsigned instrNumber,
                        Operand firstOp, Operand secondOp,
-                       std::uint64_t addr);
+                       std::uint64_t addr, long tmpOffset);
 Node* IRHead(IR* self);
-Node* getNodeByAddr(IR* self, std::uint64_t addr);
 
 std::size_t bufLen(IR* self);
 

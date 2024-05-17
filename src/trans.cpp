@@ -14,7 +14,7 @@
 #include "x86-64.h"
 namespace {
 
-void translateToX86(ir::IR* ir, trans::Arguments args) {
+void translateToX86(ir::IR* ir, trans::Arguments args, std::FILE* disasm) {
     x86_64::InstrArray instr;
     x86_64::createInstrArray(&instr, ir::bufLen(ir));
 
@@ -24,7 +24,7 @@ void translateToX86(ir::IR* ir, trans::Arguments args) {
         map.mapFunc(&instr, ir, it);
     }
 
-    listing::dumpAsm(&instr, args.asmFile);
+    listing::dumpAsm(&instr, args.asmFile, disasm);
     x86_64::destroyInstrArray(&instr);
 }
 
@@ -33,12 +33,16 @@ void translateToX86(ir::IR* ir, trans::Arguments args) {
 bool trans::translate(Arguments args) {
     assert(args.inputFile && args.asmFile);
 
-    ir::IR* ir = disasm::disassemble(args);
+    // To store SPU code disassembly and annotate output x86 assembly.
+    std::FILE* tmpDisasm = std::tmpfile();
+
+    ir::IR* ir = disasm::disassemble(args, tmpDisasm);
     if (!ir)
         return false;
 
-    translateToX86(ir, args);
+    translateToX86(ir, args, tmpDisasm);
 
+    std::fclose(tmpDisasm);
     ir::destroyIR(ir);
     return true;
 }

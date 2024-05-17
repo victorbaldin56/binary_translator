@@ -25,6 +25,7 @@ bool x86_64::translate_##func(InstrArray* arr,                                \
     } while (0)
 
 DEF(in) {
+    INSERT_NEW_INSTRUCTION(nop);
     INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rdi}},
                            {Immed, {(std::int64_t)fmt_string}});
@@ -37,6 +38,7 @@ DEF(in) {
 }
 
 DEF(out) {
+    INSERT_NEW_INSTRUCTION(nop);
     INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rdi}},
                            {Immed, {(std::int64_t)fmt_string}});
@@ -50,19 +52,23 @@ DEF(out) {
 }
 
 DEF(jmp) {
+    INSERT_NEW_INSTRUCTION(nop);
     INSERT_NEW_INSTRUCTION(jmp, {Immed,
                            {(std::int64_t)node->firstOp_.data_.immed_}});
     return true;
 }
 
 DEF(call) {
+    INSERT_NEW_INSTRUCTION(nop);
     INSERT_NEW_INSTRUCTION(call, {Immed,
                            {(std::int64_t)node->firstOp_.data_.immed_}});
+
     return true;
 }
 
 #define DEF_CONDITIONAL_JMP(instr)                                             \
 DEF(instr) {                                                                   \
+    INSERT_NEW_INSTRUCTION(nop);                                               \
     INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm0}},                       \
                             {Mem, {.reg_ = rsp}});                             \
     INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});           \
@@ -71,6 +77,8 @@ DEF(instr) {                                                                   \
     INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});           \
     INSERT_NEW_INSTRUCTION(comisd, {Reg, {.reg_ = xmm0}},                      \
                            {Reg, {.reg_ = xmm1}});                             \
+    INSERT_NEW_INSTRUCTION(x86_64::instr, {Immed,                              \
+                           {(std::int64_t)node->firstOp_.data_.immed_}});      \
     return true;                                                               \
 }
 
@@ -83,14 +91,15 @@ DEF_CONDITIONAL_JMP(je);
 #undef DEF_CONDITIONAL_JMP
 
 DEF(ret) {
+    INSERT_NEW_INSTRUCTION(nop);
     INSERT_NEW_INSTRUCTION(ret);
     return true;
 }
 
 DEF(push) {
-    Register reg = regMappings[node->firstOp_.data_.regNum_].reg;
-
+    INSERT_NEW_INSTRUCTION(nop);
     if (node->firstOp_.type_ == ir::Operand::Reg) {
+        Register reg = regMappings[node->firstOp_.data_.regNum_].reg;
         INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
         INSERT_NEW_INSTRUCTION(movsd, {Mem, {.reg_ = rsp}},
                                {Reg, {.reg_ = reg}});
@@ -104,6 +113,7 @@ DEF(push) {
 }
 
 DEF(pop) {
+    INSERT_NEW_INSTRUCTION(nop);
     Register reg = regMappings[node->firstOp_.data_.regNum_].reg;
     INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = reg}}, {Mem, {.reg_ = rsp}});
     INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
@@ -111,8 +121,8 @@ DEF(pop) {
     return true;
 }
 
-
 DEF(sqrt) {
+    INSERT_NEW_INSTRUCTION(nop);
     INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm1}},
                            {Mem, {.reg_ = rsp}});
     INSERT_NEW_INSTRUCTION(sqrtsd, {Reg, {.reg_ = xmm0}},
@@ -125,6 +135,7 @@ DEF(sqrt) {
 
 #define DEF_ARITH_BIN_OP(op)                                                   \
 DEF(op) {                                                                      \
+    INSERT_NEW_INSTRUCTION(nop);                                               \
     INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm0}},                       \
                             {Mem, {.reg_ = rsp}});                             \
     INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});           \

@@ -59,7 +59,7 @@ inline bool checkSignature(buffer_file::Buffer* buffer) {
 }
 
 DisasmStatus disassembleOnCurrent(buffer_file::Buffer* buffer,
-                                  ON_DEBUG(std::FILE* output,)
+                                  std::FILE* output,
                                   ir::IR* ir) {
     assert(buffer);
     assert(ir);
@@ -79,7 +79,8 @@ DisasmStatus disassembleOnCurrent(buffer_file::Buffer* buffer,
         return Error;
     }
 
-    ON_DEBUG(std::fprintf(output, "%s", instrMappings[opcode].name));
+    long disasmFilePos = std::ftell(output);
+    std::fprintf(output, "%s", instrMappings[opcode].name);
 
     if (fullOpcode & Reg) {
         if (!(instrMappings[opcode].operandTypes & Reg)) {
@@ -99,7 +100,7 @@ DisasmStatus disassembleOnCurrent(buffer_file::Buffer* buffer,
             return Error;
         }
 
-        ON_DEBUG(std::fprintf(output, " %s", x86_64::regMappings[regNum].nameInSPU));
+        std::fprintf(output, " %s", x86_64::regMappings[regNum].nameInSPU);
         firstOp.type_ = ir::Operand::Reg;
         firstOp.data_ = {.regNum_ = regNum};
     }
@@ -118,26 +119,26 @@ DisasmStatus disassembleOnCurrent(buffer_file::Buffer* buffer,
 
         // Get double by misaligned address
         std::memcpy(&imm, &buffer->buf[buffer->pos], sizeof(imm));
-        ON_DEBUG(std::fprintf(output, " %lg", imm));
+        std::fprintf(output, " %lg", imm);
         if (firstOp.type_ == ir::Operand::Reg) {
             secondOp.type_ = ir::Operand::Immed;
             secondOp.data_ = {.immed_ = imm};
         } else {
-            firstOp.type_ = ir::Operand::Reg;
+            firstOp.type_ = ir::Operand::Immed;
             firstOp.data_ = {.immed_ = imm};
         }
 
         buffer->pos += sizeof(imm);
     }
 
-    ON_DEBUG(std::fprintf(output, "\n"));
+    std::fputc(0, output);
     // save pointer to node for future iterations
-    ir::insertIRNodeBack(ir, opcode, firstOp, secondOp, pos);
+    ir::insertIRNodeBack(ir, opcode, firstOp, secondOp, pos, disasmFilePos);
     return Proceeding;
 }
 
 bool disassembleSPUCode(buffer_file::Buffer* buffer,
-                        ON_DEBUG(std::FILE* output,) ir::IR* ir) {
+                        std::FILE* output, ir::IR* ir) {
     assert(buffer);
 
     if (!checkSignature(buffer)) {
@@ -146,7 +147,7 @@ bool disassembleSPUCode(buffer_file::Buffer* buffer,
     }
 
     while (buffer->pos < buffer->len) {
-        switch (disassembleOnCurrent(buffer, ON_DEBUG(output,) ir)) {
+        switch (disassembleOnCurrent(buffer, output, ir)) {
         case Proceeding:
             break;
         case Halt:
@@ -163,7 +164,7 @@ bool disassembleSPUCode(buffer_file::Buffer* buffer,
 
 }
 
-ir::IR* disasm::disassemble(trans::Arguments args) {
+ir::IR* disasm::disassemble(trans::Arguments args, std::FILE* output) {
     assert(args.inputFile);
     assert(args.asmFile);
 
@@ -174,23 +175,12 @@ ir::IR* disasm::disassemble(trans::Arguments args) {
 
     ir::IR* ir = ir::createIR(inputBuffer->len);
 
-#ifdef DEBUG
-    std::FILE* output = std::fopen(args.asmFile, "w");
-    if (!output) {
-        std::fprintf(stderr,
-                     "Failed to open %s: %s\n",
-                     args.asmFile, std::strerror(errno));
-        goto cleanup;
-    }
-#endif
-
-    if (!disassembleSPUCode(inputBuffer, ON_DEBUG(output,) ir)) {
+    if (!disassembleSPUCode(inputBuffer, output, ir)) {
         // std::remove(args.outputFile);
         goto cleanup;
     }
 
     buffer_file::freeBuffer(inputBuffer);
-    ON_DEBUG(std::fclose(output));
     return ir;
 
 cleanup:

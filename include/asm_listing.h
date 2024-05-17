@@ -14,7 +14,8 @@
 
 namespace listing {
 
-bool dumpAsm(x86_64::InstrArray* arr, const char* file);
+bool dumpAsm(x86_64::InstrArray* arr, const char* file,
+             std::FILE* tmpDisasm);
 
 }  // namespace listing
 

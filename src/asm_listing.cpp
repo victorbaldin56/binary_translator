@@ -13,6 +13,8 @@
 
 namespace {
 
+const int MaxDisasmLine = 80;
+
 void printInstruction(x86_64::Opcode instr, std::FILE* fp) {
 
 #define DEF_X86_INSTRUCTION(instr)                                             \
@@ -48,12 +50,29 @@ inline void printRegister(x86_64::Register reg, std::FILE* fp) {
 inline void printOperand(x86_64::Instr::Operand op, std::FILE* fp) {
     if (op.type_ == x86_64::Immed)
         fprintf(fp, "0x%lx", op.qword_);
-    else
+    else if (op.type_ == x86_64::Reg)
         printRegister(op.reg_, fp);
+    else if (op.type_ == x86_64::Mem) {
+        fprintf(fp, "[");
+        printRegister(op.reg_, fp);
+        fprintf(fp, "]");
+    }
 }
 
-void dumpInstruction(x86_64::Instr instr, std::FILE* fp) {
+void dumpInstruction(x86_64::Instr instr, std::FILE* fp, std::FILE* disasm) {
     assert(fp);
+    assert(disasm);
+
+    if (instr.opcode_ == x86_64::nop) {
+        std::fseek(disasm, instr.disasmFileOffset_, 0);
+        char disasmBuf[MaxDisasmLine] = {};
+        std::fgets(disasmBuf, MaxDisasmLine, disasm);
+
+        // Print translation annotation.
+        fprintf(fp, "\n"
+                    "    ; %s\n", disasmBuf);
+        return;
+    }
 
     printInstruction(instr.opcode_, fp);
 
@@ -72,7 +91,8 @@ void dumpInstruction(x86_64::Instr instr, std::FILE* fp) {
 
 }
 
-bool listing::dumpAsm(x86_64::InstrArray* arr, const char* file) {
+bool listing::dumpAsm(x86_64::InstrArray* arr, const char* file,
+                      std::FILE* tmpDisasm) {
     assert(arr);
     assert(file);
 
@@ -95,7 +115,7 @@ bool listing::dumpAsm(x86_64::InstrArray* arr, const char* file) {
         "_start:\n");
 
     for (std::size_t i = 0; i < arr->sz_; ++i)
-        dumpInstruction(arr->data_[i], fp);
+        dumpInstruction(arr->data_[i], fp, tmpDisasm);
 
     std::fprintf(
         fp,

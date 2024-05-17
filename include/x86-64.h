@@ -52,6 +52,7 @@ struct Instr {
     } lhs_, rhs_;
 
     std::uint64_t absOffset_;
+    long disasmFileOffset_;
 };
 
 struct InstrArray {
@@ -61,6 +62,8 @@ struct InstrArray {
     Instr* data_;
     std::size_t sz_;
     std::size_t cap_;
+
+    std::size_t curAddr_;
 };
 
 inline bool createInstrArray(InstrArray* arr, std::size_t bufLen) {
@@ -69,7 +72,7 @@ inline bool createInstrArray(InstrArray* arr, std::size_t bufLen) {
     arr->oldAddrToNew_
         = (Instr**)std::calloc(bufLen, sizeof(*arr->oldAddrToNew_));
     arr->data_ = (Instr*)std::calloc(1, sizeof(*arr->data_));
-    arr->sz_ = 0;
+    arr->sz_ = arr->curAddr_ = 0;
     arr->cap_ = 1;
     arr->bufLen_ = bufLen;
 
@@ -109,7 +112,14 @@ inline bool pushNewInstr(InstrArray* arr,
             return false;
     }
 
-    arr->data_[arr->sz_++] = {opcode, lhs, rhs};
+    if (x86_64::addsd <= opcode)
+        arr->curAddr_ += 3;     // For SSE instructions
+    else
+        arr->curAddr_ += 1;
+
+    arr->data_[arr->sz_++] = {.opcode_ = opcode,
+                              .lhs_ = lhs, .rhs_ = rhs,
+                              .disasmFileOffset_ = node->disasmPos_};
     arr->oldAddrToNew_[node->addr_] = arr->data_ + arr->sz_ - 1;
 
     return true;

@@ -43,7 +43,7 @@ void ir::destroyIR(IR* self) {
 
 ir::Node* ir::insertIRNode(IR* self, Node* node, unsigned instrNumber,
                            Operand firstOp, Operand secondOp,
-                           std::uint64_t addr) {
+                           std::uint64_t addr, long tmpOffset) {
     assert(self);
     assert(node);
 
@@ -53,7 +53,8 @@ ir::Node* ir::insertIRNode(IR* self, Node* node, unsigned instrNumber,
 
     *newNode = {.instrNumber_ = instrNumber,
                 .firstOp_ = firstOp, .secondOp_ = secondOp,
-                .prev_ = node, .next_ = node->next_, .addr_ = addr};
+                .prev_ = node, .next_ = node->next_, .addr_ = addr,
+                .disasmPos_ = tmpOffset};
 
     node->next_->prev_ = newNode;
     node->next_ = newNode;
@@ -64,17 +65,13 @@ ir::Node* ir::insertIRNode(IR* self, Node* node, unsigned instrNumber,
 
 ir::Node* ir::insertIRNodeBack(IR* self, unsigned instrNumber,
                                Operand firstOp, Operand secondOp,
-                               std::uint64_t addr) {
+                               std::uint64_t addr, long tmpOffset) {
     return insertIRNode(self, self->fakeNode_.prev_, instrNumber,
-                        firstOp, secondOp, addr);
+                        firstOp, secondOp, addr, tmpOffset);
 }
 
 ir::Node* ir::IRHead(IR* self) {
     return &self->fakeNode_;
-}
-
-ir::Node* ir::getNodeByAddr(IR* self, std::uint64_t addr) {
-    return self->buf_[addr];
 }
 
 std::size_t ir::bufLen(IR* self) {
