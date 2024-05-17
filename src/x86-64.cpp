@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include <cstring>
 
-const char fmt_string[] = "%lg";
+extern const char fmt_string[] = "%lg";
 
 #define DEF(func)                                                             \
 bool x86_64::translate_##func(InstrArray* arr,                                \
@@ -31,7 +31,7 @@ DEF(in) {
                            {Immed, {(std::int64_t)fmt_string}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rsi}}, {Reg, {.reg_ = rsp}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}},
-                           {Immed, {(std::int64_t)std::printf}});
+                           {Immed, {(std::int64_t)scanf}});
     INSERT_NEW_INSTRUCTION(call, {Reg, {.reg_ = rax}});
 
     return true;
@@ -45,7 +45,7 @@ DEF(out) {
     INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm0}}, {Mem, {.reg_ = rsp}});
     INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}},
-                           {Immed, {(std::int64_t)std::printf}});
+                           {Immed, {(std::int64_t)printf}});
     INSERT_NEW_INSTRUCTION(call, {Reg, {.reg_ = rax}});
 
     return true;

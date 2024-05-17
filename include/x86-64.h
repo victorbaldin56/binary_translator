@@ -14,6 +14,8 @@
 
 #include "ir.h"
 
+extern const char fmt_string[];
+
 namespace x86_64 {
 
 enum OperandType {
@@ -139,7 +141,7 @@ inline bool pushNewInstr(InstrArray* arr,
         }
 
         if (opcode == add || opcode == sub)
-            arr->curAddr_ += 2;
+            arr->curAddr_ += 4;
 
         if (opcode == ret || opcode == push)
             arr->curAddr_ += 1;

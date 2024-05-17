@@ -25,7 +25,8 @@ void setRelJumps(x86_64::InstrArray* instr) {
             std::uint64_t nextAddr
                 = instr->data_[instr->oldAddrToNew_[cur.lhs_.qword_
                 + disasm::signatureSize]].absOffset_;
-            instr->data_[i].lhs_.qword_ = (std::int64_t)(nextAddr - cur.absOffset_);
+            instr->data_[i].lhs_.qword_
+                = (std::int64_t)(nextAddr - cur.absOffset_ + disasm::signatureSize);
         }
     }
 }
