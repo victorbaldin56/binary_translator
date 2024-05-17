@@ -13,6 +13,10 @@ add_executable(
     src/main.cpp
     src/buffer_file.cpp
     src/disasm.cpp
+    src/trans.cpp
+    src/x86-64.cpp
+    src/ir.cpp
+    src/asm_listing.cpp
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/include)

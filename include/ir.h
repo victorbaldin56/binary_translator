@@ -37,6 +37,7 @@ struct Node {
     Node* prev_;             ///< Prev node
     Node* next_;             ///< Next node
 
+    std::uint64_t addr_;
 };
 
 /** @brief Forward-declaration to hide implementation details. */
@@ -55,8 +56,9 @@ Node* insertIRNodeBack(IR* self, unsigned instrNumber,
                        Operand firstOp, Operand secondOp,
                        std::uint64_t addr);
 Node* IRHead(IR* self);
+Node* getNodeByAddr(IR* self, std::uint64_t addr);
 
-std::size_t IRBufLen(IR* self);
+std::size_t bufLen(IR* self);
 
 }  // namespace ir
 

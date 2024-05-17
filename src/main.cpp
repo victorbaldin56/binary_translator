@@ -28,15 +28,13 @@ const char helpMessage[] =
 int main(int argc, char** argv) {
     const option options[] = {{"help", no_argument, 0, 'h'},
                               {"verbose", no_argument, 0, 'v'},
-                              {"output", required_argument, 0, 'o'},
                               {0, 0, 0, 0}};
 
-    trans::Arguments args = {.outputFile = "disassembled.sasm"};
-
+    trans::Arguments args = {};
     opterr = 0;
 
     while (optind < argc) {
-        int ch = getopt_long(argc, argv, "hvo:", options, nullptr);
+        int ch = getopt_long(argc, argv, "hvS:", options, nullptr);
 
         switch (ch) {
         case -1:
@@ -48,8 +46,8 @@ int main(int argc, char** argv) {
         case 'v':
             args.verbose = true;
             break;
-        case 'o':
-            args.outputFile = optarg;
+        case 'S':
+            args.asmFile = optarg;
             break;
         case '?':
             std::puts(helpMessage);

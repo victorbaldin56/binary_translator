@@ -15,12 +15,12 @@
 #include "buffer_file.h"
 #include "x86-64.h"
 
-#define DEBUG
+// #define DEBUG
 
 #ifdef DEBUG
-#define ON_DEBUG(x) x
+#define ON_DEBUG(...) __VA_ARGS__
 #else
-#define ON_DEBUG(x)
+#define ON_DEBUG(...)
 #endif
 
 #define ARRAY_SIZE(x) sizeof(x) / sizeof(x[0])
@@ -59,9 +59,9 @@ inline bool checkSignature(buffer_file::Buffer* buffer) {
 }
 
 DisasmStatus disassembleOnCurrent(buffer_file::Buffer* buffer,
-                                  ON_DEBUG(std::FILE* output),
+                                  ON_DEBUG(std::FILE* output,)
                                   ir::IR* ir) {
-    assert(buffer && output);
+    assert(buffer);
     assert(ir);
 
     unsigned char fullOpcode = buffer->buf[buffer->pos++];
@@ -94,12 +94,12 @@ DisasmStatus disassembleOnCurrent(buffer_file::Buffer* buffer,
 
         unsigned char regNum = buffer->buf[buffer->pos++];
 
-        if (regNum == 0 || regNum > ARRAY_SIZE(trans::regMappings)) {
+        if (regNum == 0 || regNum > ARRAY_SIZE(x86_64::regMappings)) {
             std::fprintf(stderr, "Invalid register\n");
             return Error;
         }
 
-        ON_DEBUG(std::fprintf(output, " %s", trans::regMappings[regNum].nameInSPU));
+        ON_DEBUG(std::fprintf(output, " %s", x86_64::regMappings[regNum].nameInSPU));
         firstOp.type_ = ir::Operand::Reg;
         firstOp.data_ = {.regNum_ = regNum};
     }
@@ -137,8 +137,8 @@ DisasmStatus disassembleOnCurrent(buffer_file::Buffer* buffer,
 }
 
 bool disassembleSPUCode(buffer_file::Buffer* buffer,
-                        ON_DEBUG(std::FILE* output), ir::IR* ir) {
-    assert(buffer && output);
+                        ON_DEBUG(std::FILE* output,) ir::IR* ir) {
+    assert(buffer);
 
     if (!checkSignature(buffer)) {
         std::fprintf(stderr, "Invalid input file format\n");
@@ -146,7 +146,7 @@ bool disassembleSPUCode(buffer_file::Buffer* buffer,
     }
 
     while (buffer->pos < buffer->len) {
-        switch (disassembleOnCurrent(buffer, ON_DEBUG(output), ir)) {
+        switch (disassembleOnCurrent(buffer, ON_DEBUG(output,) ir)) {
         case Proceeding:
             break;
         case Halt:
@@ -165,7 +165,7 @@ bool disassembleSPUCode(buffer_file::Buffer* buffer,
 
 ir::IR* disasm::disassemble(trans::Arguments args) {
     assert(args.inputFile);
-    assert(args.outputFile);
+    assert(args.asmFile);
 
     buffer_file::Buffer* inputBuffer =
         buffer_file::createBuffer(args.inputFile);
@@ -175,21 +175,22 @@ ir::IR* disasm::disassemble(trans::Arguments args) {
     ir::IR* ir = ir::createIR(inputBuffer->len);
 
 #ifdef DEBUG
-    std::FILE* output = std::fopen(args.outputFile, "w");
+    std::FILE* output = std::fopen(args.asmFile, "w");
     if (!output) {
         std::fprintf(stderr,
                      "Failed to open %s: %s\n",
-                     args.outputFile, std::strerror(errno));
+                     args.asmFile, std::strerror(errno));
         goto cleanup;
     }
 #endif
 
-    if (!disassembleSPUCode(inputBuffer, ON_DEBUG(output), ir)) {
+    if (!disassembleSPUCode(inputBuffer, ON_DEBUG(output,) ir)) {
         // std::remove(args.outputFile);
         goto cleanup;
     }
 
-    std::fclose(output);
+    buffer_file::freeBuffer(inputBuffer);
+    ON_DEBUG(std::fclose(output));
     return ir;
 
 cleanup:

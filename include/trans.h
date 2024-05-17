@@ -25,11 +25,12 @@ struct InstrMap {
 
 struct Arguments {
     const char* inputFile;
-    const char* outputFile;
+    const char* asmFile;
     bool verbose;
 };
 
-#define DEF_INSTR_MAPPING(instr, args) {#instr, args, x86_64::instr}
+#define DEF_INSTR_MAPPING(instr, args)                                         \
+    {#instr, args, x86_64::translate_##instr}
 
 static const InstrMap instrMappings[] = {
     DEF_INSTR_MAPPING(in  ,           0),
@@ -48,20 +49,8 @@ static const InstrMap instrMappings[] = {
     DEF_INSTR_MAPPING(jb  , Immed | Reg),
     DEF_INSTR_MAPPING(je  , Immed | Reg),
     DEF_INSTR_MAPPING(call, Immed | Reg),
-    DEF_INSTR_MAPPING(hlt ,           0),
+    {"hlt", 0},
     DEF_INSTR_MAPPING(ret ,           0)};
-
-struct RegMap {
-    const char* nameInSPU;
-    const char* nameInSSE;
-};
-
-static const RegMap regMappings[] = {
-    {nullptr, nullptr},
-    {"rax", "xmm2"},
-    {"rbx", "xmm3"},
-    {"rcx", "xmm4"},
-    {"rdx", "xmm5"}};
 
 bool translate(Arguments args);
 

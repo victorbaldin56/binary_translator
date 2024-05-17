@@ -14,6 +14,8 @@ struct ir::IR {
     Node fakeNode_;
     std::size_t size_;
     std::size_t bufLen_;
+
+    Node** buf_;
 };
 
 ir::IR* ir::createIR(std::size_t bufLen) {
@@ -23,14 +25,14 @@ ir::IR* ir::createIR(std::size_t bufLen) {
 
     res->bufLen_ = bufLen;
     res->fakeNode_ = {.prev_ = &res->fakeNode_, .next_ = &res->fakeNode_ };
+
     return res;
 }
 
 void ir::destroyIR(IR* self) {
     assert(self);
 
-    for (Node* it = self->fakeNode_.next_; it->next_
-        != &self->fakeNode_;) {
+    for (Node* it = self->fakeNode_.next_; it != &self->fakeNode_;) {
         Node* tmp = it->next_;
         std::free(it);
         it = tmp;
@@ -55,6 +57,8 @@ ir::Node* ir::insertIRNode(IR* self, Node* node, unsigned instrNumber,
 
     node->next_->prev_ = newNode;
     node->next_ = newNode;
+    ++self->size_;
+
     return newNode;
 }
 
@@ -69,6 +73,10 @@ ir::Node* ir::IRHead(IR* self) {
     return &self->fakeNode_;
 }
 
-std::size_t ir::IRBufLen(IR* self) {
+ir::Node* ir::getNodeByAddr(IR* self, std::uint64_t addr) {
+    return self->buf_[addr];
+}
+
+std::size_t ir::bufLen(IR* self) {
     return self->bufLen_;
 }
