@@ -102,24 +102,8 @@ inline bool reallocInstrArray(InstrArray* arr, std::size_t capacity) {
     return true;
 }
 
-inline bool pushNewInstr(InstrArray* arr,
-                         ir::Node* node,
-                         Opcode opcode,
-                         Instr::Operand lhs = {},
-                         Instr::Operand rhs = {}) {
-    assert(arr);
-
-    if (arr->sz_ == arr->cap_) {
-        if (!reallocInstrArray(arr, arr->cap_ * 2))
-            return false;
-    }
-
-    arr->data_[arr->sz_++] = {.opcode_ = opcode,
-                              .lhs_ = lhs, .rhs_ = rhs,
-                              .absOffset_ = arr->curAddr_,
-                              .disasmFileOffset_ = node->disasmPos_};
-    arr->oldAddrToNew_[node->addr_] = arr->sz_ - 1;
-
+inline void incrementAddress(InstrArray* arr, Opcode opcode,
+                             Instr::Operand lhs, Instr::Operand rhs) {
     // SSE instructions
     if (addsd <= opcode) {
         if (opcode == movsd)
@@ -146,9 +130,35 @@ inline bool pushNewInstr(InstrArray* arr,
         if (opcode == ret || opcode == push)
             arr->curAddr_ += 1;
 
-        if (opcode == mov)
-            arr->curAddr_ += 9;
+        if (opcode == mov) {
+            if (rhs.type_ == Immed)
+                arr->curAddr_ += 10;
+            else
+                arr->curAddr_ += 3;
+        }
     }
+}
+
+inline bool pushNewInstr(InstrArray* arr,
+                         ir::Node* node,
+                         Opcode opcode,
+                         Instr::Operand lhs = {},
+                         Instr::Operand rhs = {}) {
+    assert(arr);
+
+    if (arr->sz_ == arr->cap_) {
+        if (!reallocInstrArray(arr, arr->cap_ * 2))
+            return false;
+    }
+
+    arr->data_[arr->sz_++] = {.opcode_ = opcode,
+                              .lhs_ = lhs, .rhs_ = rhs,
+                              .absOffset_ = arr->curAddr_,
+                              .disasmFileOffset_ = node->disasmPos_};
+    if (opcode == nop)
+        arr->oldAddrToNew_[node->addr_] = arr->sz_;  // next after nop separator
+
+    incrementAddress(arr, opcode, lhs, rhs);
 
     return true;
 }

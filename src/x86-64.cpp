@@ -26,27 +26,31 @@ bool x86_64::translate_##func(InstrArray* arr,                                \
 
 DEF(in) {
     INSERT_NEW_INSTRUCTION(nop);
+    INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}}, {Immed, {1}});
     INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rdi}},
                            {Immed, {(std::int64_t)fmt_string}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rsi}}, {Reg, {.reg_ = rsp}});
-    INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}},
+    INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
+    INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rbx}},
                            {Immed, {(std::int64_t)scanf}});
-    INSERT_NEW_INSTRUCTION(call, {Reg, {.reg_ = rax}});
+    INSERT_NEW_INSTRUCTION(call, {Reg, {.reg_ = rbx}});
+    INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
 
     return true;
 }
 
 DEF(out) {
     INSERT_NEW_INSTRUCTION(nop);
+    INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}}, {Immed, {1}});
     INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rdi}},
                            {Immed, {(std::int64_t)fmt_string}});
     INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm0}}, {Mem, {.reg_ = rsp}});
     INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
-    INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}},
+    INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rbx}},
                            {Immed, {(std::int64_t)printf}});
-    INSERT_NEW_INSTRUCTION(call, {Reg, {.reg_ = rax}});
+    INSERT_NEW_INSTRUCTION(call, {Reg, {.reg_ = rbx}});
 
     return true;
 }
@@ -106,8 +110,8 @@ DEF(push) {
     } else {
         std::int64_t immed = 0;
         std::memcpy(&immed, &node->firstOp_.data_.immed_, sizeof(immed));
-        INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}}, {Immed, {immed}});
-        INSERT_NEW_INSTRUCTION(push, {Reg, {.reg_ = rax}});
+        INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rbx}}, {Immed, {immed}});
+        INSERT_NEW_INSTRUCTION(push, {Reg, {.reg_ = rbx}});
     }
 
     return true;

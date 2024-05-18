@@ -87,7 +87,6 @@ void dumpInstruction(x86_64::Instr instr, std::FILE* output, std::FILE* disasm) 
     do {                                                                       \
         if (instr.opcode_ == x86_64::mov)                                      \
             printOperand(op, output);                                          \
-                                                                               \
         else                                                                   \
             printOperand(op, output, true); /* Print as dword */               \
     } while (0)
@@ -152,7 +151,8 @@ bool listing::dumpAsm(x86_64::InstrArray* arr, const char* file,
         "\n"
         "section .text\n"
         "\n"
-        "_start:\n");
+        "_start:\n"
+        "    default abs\n");
 
     for (std::size_t i = 0; i < arr->sz_; ++i)
         dumpInstruction(arr->data_[i], fp, tmpDisasm);

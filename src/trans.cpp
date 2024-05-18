@@ -12,7 +12,10 @@
 #include "asm_listing.h"
 #include "disasm.h"
 #include "x86-64.h"
+
 namespace {
+
+const int JmpOffset = 3;
 
 void setRelJumps(x86_64::InstrArray* instr) {
     assert(instr);
@@ -26,7 +29,7 @@ void setRelJumps(x86_64::InstrArray* instr) {
                 = instr->data_[instr->oldAddrToNew_[cur.lhs_.qword_
                 + disasm::signatureSize]].absOffset_;
             instr->data_[i].lhs_.qword_
-                = (std::int64_t)(nextAddr - cur.absOffset_ + disasm::signatureSize);
+                = (std::int64_t)(nextAddr - cur.absOffset_ - JmpOffset);
         }
     }
 }

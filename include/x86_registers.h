@@ -10,6 +10,7 @@
 #endif
 
 DEF_X86_REG(rax)
+DEF_X86_REG(rbx)
 DEF_X86_REG(rdi)
 DEF_X86_REG(rsi)
 DEF_X86_REG(rsp)
