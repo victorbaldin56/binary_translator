@@ -161,7 +161,7 @@ bool listing::dumpAsm(x86_64::InstrArray* arr, const char* file,
         fp,
         "\n"
         "section .rodata\n"
-        "fmt_string db '%%lg '\n");
+        "fmt_string db '%%lg'\n");
 
     std::fclose(fp);
 

@@ -42,7 +42,20 @@ DEF(in) {
 
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rbx}},
                            {Immed, {(std::int64_t)scanf}});
+
+    INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
+
+    // IDK WTF but scanf some why destroys xmm3.
+    INSERT_NEW_INSTRUCTION(movsd, {Mem, {.reg_ = rsp}}, {Reg, {.reg_ = xmm3}});
+
+    // Alignment.
+    INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
     INSERT_NEW_INSTRUCTION(call, {Reg, {.reg_ = rbx}});
+    INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
+
+    // Restore xmm3.
+    INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm3}}, {Mem, {.reg_ = rsp}});
+    INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
 
     return true;
 }
@@ -53,9 +66,23 @@ DEF(out) {
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rdi}},
                            {Immed, {(std::int64_t)fmt_string}});
     INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm0}}, {Mem, {.reg_ = rsp}});
+
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rbx}},
                            {Immed, {(std::int64_t)printf}});
+
+    INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
+    INSERT_NEW_INSTRUCTION(movsd, {Mem, {.reg_ = rsp}}, {Reg, {.reg_ = xmm2}});
+
+    // Alignment.
+    INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
+
     INSERT_NEW_INSTRUCTION(call, {Reg, {.reg_ = rbx}});
+    INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
+
+    // Restore xmm2.
+    INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm2}}, {Mem, {.reg_ = rsp}});
+    INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
+
     INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
 
     return true;
@@ -153,11 +180,11 @@ DEF(op) {                                                                      \
     INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm1}},                       \
                            {Mem, {.reg_ = rsp}});                              \
     INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});           \
-    INSERT_NEW_INSTRUCTION(op##sd, {Reg, {.reg_ = xmm0}},                      \
-                           {Reg, {.reg_ = xmm1}});                             \
+    INSERT_NEW_INSTRUCTION(op##sd, {Reg, {.reg_ = xmm1}},                      \
+                           {Reg, {.reg_ = xmm0}});                             \
     INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});           \
     INSERT_NEW_INSTRUCTION(movsd, {Mem, {.reg_ = rsp}},                        \
-                           {Reg, {.reg_ = xmm0}});                             \
+                           {Reg, {.reg_ = xmm1}});                             \
     return true;                                                               \
 }
 
