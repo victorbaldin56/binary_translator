@@ -11,7 +11,7 @@ main:
     ; in
     mov rax, strict qword 0x1                               ; 00000000
     sub rsp, 0x8                                            ; 0000000a
-    mov rdi, fmt_string                                     ; 0000000e
+    mov rdi, scanf_fmt                                      ; 0000000e
     mov rsi, rsp                                            ; 00000018
     mov rbx, scanf                                          ; 0000001b
     sub rsp, 0x8                                            ; 00000025
@@ -29,7 +29,7 @@ main:
     ; in
     mov rax, strict qword 0x1                               ; 0000004a
     sub rsp, 0x8                                            ; 00000054
-    mov rdi, fmt_string                                     ; 00000058
+    mov rdi, scanf_fmt                                      ; 00000058
     mov rsi, rsp                                            ; 00000062
     mov rbx, scanf                                          ; 00000065
     sub rsp, 0x8                                            ; 0000006f
@@ -47,7 +47,7 @@ main:
     ; in
     mov rax, strict qword 0x1                               ; 00000094
     sub rsp, 0x8                                            ; 0000009e
-    mov rdi, fmt_string                                     ; 000000a2
+    mov rdi, scanf_fmt                                      ; 000000a2
     mov rsi, rsp                                            ; 000000ac
     mov rbx, scanf                                          ; 000000af
     sub rsp, 0x8                                            ; 000000b9
@@ -76,7 +76,7 @@ main:
     movsd xmm1, [rsp]                                       ; 000000fb
     add rsp, 0x8                                            ; 00000100
     comisd xmm0, xmm1                                       ; 00000104
-    je 0x20d                                                ; 00000108
+    je 0x20e                                                ; 00000108
 
     ; call 163
     call 0x2dc                                              ; 0000010e
@@ -95,7 +95,7 @@ main:
     movsd xmm1, [rsp]                                       ; 00000130
     add rsp, 0x8                                            ; 00000135
     comisd xmm0, xmm1                                       ; 00000139
-    ja 0x360                                                ; 0000013d
+    ja 0x361                                                ; 0000013d
 
     ; push rdx
     sub rsp, 0x8                                            ; 00000143
@@ -184,7 +184,7 @@ main:
 
     ; out
     mov rax, strict qword 0x1                               ; 00000234
-    mov rdi, fmt_string                                     ; 0000023e
+    mov rdi, scanf_fmt                                      ; 0000023e
     movsd xmm0, [rsp]                                       ; 00000248
     mov rbx, printf                                         ; 0000024d
     sub rsp, 0x8                                            ; 00000257
@@ -228,7 +228,7 @@ main:
 
     ; out
     mov rax, strict qword 0x1                               ; 000002d0
-    mov rdi, fmt_string                                     ; 000002da
+    mov rdi, scanf_fmt                                      ; 000002da
     movsd xmm0, [rsp]                                       ; 000002e4
     mov rbx, printf                                         ; 000002e9
     sub rsp, 0x8                                            ; 000002f3
@@ -257,7 +257,7 @@ main:
     movsd xmm1, [rsp]                                       ; 00000335
     add rsp, 0x8                                            ; 0000033a
     comisd xmm0, xmm1                                       ; 0000033e
-    je 0x15b                                                ; 00000342
+    je 0x15c                                                ; 00000342
 
     ; push 0
     mov rbx, strict qword 0x0                               ; 00000348
@@ -291,7 +291,7 @@ main:
 
     ; out
     mov rax, strict qword 0x1                               ; 000003a3
-    mov rdi, fmt_string                                     ; 000003ad
+    mov rdi, scanf_fmt                                      ; 000003ad
     movsd xmm0, [rsp]                                       ; 000003b7
     mov rbx, printf                                         ; 000003bc
     sub rsp, 0x8                                            ; 000003c6
@@ -374,4 +374,4 @@ main:
     ret                                                     ; 000004aa
 
 section .rodata
-fmt_string db '%lg'
+scanf_fmt db '%lg'

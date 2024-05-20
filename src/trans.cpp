@@ -15,8 +15,6 @@
 
 namespace {
 
-const int JmpOffset = 3;
-
 void setRelJumps(x86_64::InstrArray* instr) {
     assert(instr);
 
@@ -29,12 +27,17 @@ void setRelJumps(x86_64::InstrArray* instr) {
                 = instr->data_[instr->oldAddrToNew_[cur.lhs_.qword_
                 + disasm::signatureSize]].absOffset_;
 
+            unsigned jmpOffset = 0;
+
             if (cur.opcode_ == x86_64::call)
-                instr->data_[i].lhs_.qword_
-                    = (std::int64_t)(nextAddr - cur.absOffset_ - 1);
+                jmpOffset = 1;
+            else if (cur.opcode_ == x86_64::jmp)
+                jmpOffset = 3;
             else
-                instr->data_[i].lhs_.qword_
-                    = (std::int64_t)(nextAddr - cur.absOffset_ - JmpOffset);
+                jmpOffset = 2;
+
+            instr->data_[i].lhs_.qword_
+                = (std::int64_t)(nextAddr - cur.absOffset_ - jmpOffset);
         }
     }
 }

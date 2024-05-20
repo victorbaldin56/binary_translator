@@ -14,7 +14,7 @@
 
 #include "ir.h"
 
-extern const char fmt_string[];
+extern const char scanf_fmt[];
 
 namespace x86_64 {
 

@@ -61,7 +61,7 @@ inline void printOperand(x86_64::Instr::Operand op, std::FILE* fp,
     if (op.type_ == x86_64::Immed) {
         GEN_SYMBOL(printf);
         GEN_SYMBOL(scanf);
-        GEN_SYMBOL(fmt_string);
+        GEN_SYMBOL(scanf_fmt);
 
         if (asDword)
             std::fprintf(fp, "0x%x", (std::int32_t)op.qword_);
@@ -161,7 +161,7 @@ bool listing::dumpAsm(x86_64::InstrArray* arr, const char* file,
         fp,
         "\n"
         "section .rodata\n"
-        "fmt_string db '%%lg'\n");
+        "scanf_fmt db '%%lg'\n");
 
     std::fclose(fp);
 
