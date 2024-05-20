@@ -1,31 +1,37 @@
 jmp main
 
 Factorial:
-    pop rax ; save current n to rax
     push rax
-    push rax
-    push 1
+    push 0
     je end ; condition of the recursion end
 
-    push rax + -1
-;    push rax + -1
-;    out
+    push rax
+
+    push rax
+    push 1
+    sub
+    pop rax
 
     call Factorial ; recursive call
 
+    push rax
     mul ; fact(n) = n*fact(n - 1)
 
     pop rax
+    ret
 
-    end:
-        push rax
-        ret
+end:
+    push 1
+    pop rax
+    ret
 
 main:
     in
     pop rax
-    push rax + 1
+
     call Factorial
+
+    push rax
     out
 
-hlt
+    hlt

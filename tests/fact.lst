@@ -1,0 +1,143 @@
+     1                                  extern printf
+     2                                  extern scanf
+     3                                  
+     4                                  global main
+     5                                  
+     6                                  section .text
+     7                                  
+     8                                  main:
+     9                                      default abs
+    10                                  
+    11                                      ; jmp 72
+    12 00000000 E9(C3000000)                jmp 0xc3                                                ; 00000000
+    13                                  
+    14                                      ; push rax
+    15 00000005 4883EC08                    sub rsp, 0x8                                            ; 00000005
+    16 00000009 F20F111424                  movsd [rsp], xmm2                                       ; 00000009
+    17                                  
+    18                                      ; push 0
+    19 0000000E 48BB00000000000000-         mov rbx, strict qword 0x0                               ; 0000000e
+    19 00000017 00                 
+    20 00000018 53                          push rbx                                                ; 00000018
+    21                                  
+    22                                      ; je 60
+    23 00000019 F20F100424                  movsd xmm0, [rsp]                                       ; 00000019
+    24 0000001E 4883C408                    add rsp, 0x8                                            ; 0000001e
+    25 00000022 F20F100C24                  movsd xmm1, [rsp]                                       ; 00000022
+    26 00000027 4883C408                    add rsp, 0x8                                            ; 00000027
+    27 0000002B 660F2FC1                    comisd xmm0, xmm1                                       ; 0000002b
+    28 0000002F 0F84(80000000)              je 0x80                                                 ; 0000002f
+    29                                  
+    30                                      ; push rax
+    31 00000035 4883EC08                    sub rsp, 0x8                                            ; 00000035
+    32 00000039 F20F111424                  movsd [rsp], xmm2                                       ; 00000039
+    33                                  
+    34                                      ; push rax
+    35 0000003E 4883EC08                    sub rsp, 0x8                                            ; 0000003e
+    36 00000042 F20F111424                  movsd [rsp], xmm2                                       ; 00000042
+    37                                  
+    38                                      ; push 1
+    39 00000047 48BB000000000000F0-         mov rbx, strict qword 0x3ff0000000000000                ; 00000047
+    39 00000050 3F                 
+    40 00000051 53                          push rbx                                                ; 00000051
+    41                                  
+    42                                      ; sub
+    43 00000052 F20F100424                  movsd xmm0, [rsp]                                       ; 00000052
+    44 00000057 4883C408                    add rsp, 0x8                                            ; 00000057
+    45 0000005B F20F100C24                  movsd xmm1, [rsp]                                       ; 0000005b
+    46 00000060 4883C408                    add rsp, 0x8                                            ; 00000060
+    47 00000064 F20F5CC8                    subsd xmm1, xmm0                                        ; 00000064
+    48 00000068 4883EC08                    sub rsp, 0x8                                            ; 00000068
+    49 0000006C F20F110C24                  movsd [rsp], xmm1                                       ; 0000006c
+    50                                  
+    51                                      ; pop rax
+    52 00000071 F20F101424                  movsd xmm2, [rsp]                                       ; 00000071
+    53 00000076 4883C408                    add rsp, 0x8                                            ; 00000076
+    54                                  
+    55                                      ; call 9
+    56 0000007A E8(8AFFFFFF)                call 0xffffff8a                                         ; 0000007a
+    57                                  
+    58                                      ; push rax
+    59 0000007F 4883EC08                    sub rsp, 0x8                                            ; 0000007f
+    60 00000083 F20F111424                  movsd [rsp], xmm2                                       ; 00000083
+    61                                  
+    62                                      ; mul
+    63 00000088 F20F100424                  movsd xmm0, [rsp]                                       ; 00000088
+    64 0000008D 4883C408                    add rsp, 0x8                                            ; 0000008d
+    65 00000091 F20F100C24                  movsd xmm1, [rsp]                                       ; 00000091
+    66 00000096 4883C408                    add rsp, 0x8                                            ; 00000096
+    67 0000009A F20F59C8                    mulsd xmm1, xmm0                                        ; 0000009a
+    68 0000009E 4883EC08                    sub rsp, 0x8                                            ; 0000009e
+    69 000000A2 F20F110C24                  movsd [rsp], xmm1                                       ; 000000a2
+    70                                  
+    71                                      ; pop rax
+    72 000000A7 F20F101424                  movsd xmm2, [rsp]                                       ; 000000a7
+    73 000000AC 4883C408                    add rsp, 0x8                                            ; 000000ac
+    74                                  
+    75                                      ; ret
+    76 000000B0 C3                          ret                                                     ; 000000b0
+    77                                  
+    78                                      ; push 1
+    79 000000B1 48BB000000000000F0-         mov rbx, strict qword 0x3ff0000000000000                ; 000000b1
+    79 000000BA 3F                 
+    80 000000BB 53                          push rbx                                                ; 000000bb
+    81                                  
+    82                                      ; pop rax
+    83 000000BC F20F101424                  movsd xmm2, [rsp]                                       ; 000000bc
+    84 000000C1 4883C408                    add rsp, 0x8                                            ; 000000c1
+    85                                  
+    86                                      ; ret
+    87 000000C5 C3                          ret                                                     ; 000000c5
+    88                                  
+    89                                      ; in
+    90 000000C6 48B801000000000000-         mov rax, strict qword 0x1                               ; 000000c6
+    90 000000CF 00                 
+    91 000000D0 4883EC08                    sub rsp, 0x8                                            ; 000000d0
+    92 000000D4 48BF-                       mov rdi, scanf_fmt                                      ; 000000d4
+    92 000000D6 [0000000000000000] 
+    93 000000DE 4889E6                      mov rsi, rsp                                            ; 000000de
+    94 000000E1 48BB-                       mov rbx, scanf                                          ; 000000e1
+    94 000000E3 [0000000000000000] 
+    95 000000EB 4883EC08                    sub rsp, 0x8                                            ; 000000eb
+    96 000000EF F20F111C24                  movsd [rsp], xmm3                                       ; 000000ef
+    97 000000F4 4883EC08                    sub rsp, 0x8                                            ; 000000f4
+    98 000000F8 FFD3                        call rbx                                                ; 000000f8
+    99 000000FA 4883C408                    add rsp, 0x8                                            ; 000000fa
+   100 000000FE F20F101C24                  movsd xmm3, [rsp]                                       ; 000000fe
+   101 00000103 4883C408                    add rsp, 0x8                                            ; 00000103
+   102                                  
+   103                                      ; pop rax
+   104 00000107 F20F101424                  movsd xmm2, [rsp]                                       ; 00000107
+   105 0000010C 4883C408                    add rsp, 0x8                                            ; 0000010c
+   106                                  
+   107                                      ; call 9
+   108 00000110 E8(F4FEFFFF)                call 0xfffffef4                                         ; 00000110
+   109                                  
+   110                                      ; push rax
+   111 00000115 4883EC08                    sub rsp, 0x8                                            ; 00000115
+   112 00000119 F20F111424                  movsd [rsp], xmm2                                       ; 00000119
+   113                                  
+   114                                      ; out
+   115 0000011E 48B801000000000000-         mov rax, strict qword 0x1                               ; 0000011e
+   115 00000127 00                 
+   116 00000128 48BF-                       mov rdi, scanf_fmt                                      ; 00000128
+   116 0000012A [0000000000000000] 
+   117 00000132 F20F100424                  movsd xmm0, [rsp]                                       ; 00000132
+   118 00000137 48BB-                       mov rbx, printf                                         ; 00000137
+   118 00000139 [0000000000000000] 
+   119 00000141 4883EC08                    sub rsp, 0x8                                            ; 00000141
+   120 00000145 F20F111424                  movsd [rsp], xmm2                                       ; 00000145
+   121 0000014A 4883EC08                    sub rsp, 0x8                                            ; 0000014a
+   122 0000014E FFD3                        call rbx                                                ; 0000014e
+   123 00000150 4883C408                    add rsp, 0x8                                            ; 00000150
+   124 00000154 F20F101424                  movsd xmm2, [rsp]                                       ; 00000154
+   125 00000159 4883C408                    add rsp, 0x8                                            ; 00000159
+   126 0000015D 4883C408                    add rsp, 0x8                                            ; 0000015d
+   127                                  
+   128                                      ; hlt
+   129 00000161 48B800000000000000-         mov rax, strict qword 0x0                               ; 00000161
+   129 0000016A 00                 
+   130 0000016B C3                          ret                                                     ; 0000016b
+   131                                  
+   132                                  section .rodata
+   133 00000000 256C67                  scanf_fmt db '%lg'
