@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include <cstring>
 
-extern const char fmt_string[] = "%lg";
+extern const char fmt_string[] = "%lg ";
 
 #define DEF(func)                                                             \
 bool x86_64::translate_##func(InstrArray* arr,                                \
@@ -24,6 +24,14 @@ bool x86_64::translate_##func(InstrArray* arr,                                \
             return false;                                                     \
     } while (0)
 
+DEF(hlt) {
+    INSERT_NEW_INSTRUCTION(nop);
+    INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}}, {Immed});
+    INSERT_NEW_INSTRUCTION(ret);
+
+    return true;
+}
+
 DEF(in) {
     INSERT_NEW_INSTRUCTION(nop);
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}}, {Immed, {1}});
@@ -31,11 +39,10 @@ DEF(in) {
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rdi}},
                            {Immed, {(std::int64_t)fmt_string}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rsi}}, {Reg, {.reg_ = rsp}});
-    INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
+
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rbx}},
                            {Immed, {(std::int64_t)scanf}});
     INSERT_NEW_INSTRUCTION(call, {Reg, {.reg_ = rbx}});
-    INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
 
     return true;
 }
@@ -43,14 +50,13 @@ DEF(in) {
 DEF(out) {
     INSERT_NEW_INSTRUCTION(nop);
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}}, {Immed, {1}});
-    INSERT_NEW_INSTRUCTION(sub, {Reg, {.reg_ = rsp}}, {Immed, {8}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rdi}},
                            {Immed, {(std::int64_t)fmt_string}});
     INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm0}}, {Mem, {.reg_ = rsp}});
-    INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rbx}},
                            {Immed, {(std::int64_t)printf}});
     INSERT_NEW_INSTRUCTION(call, {Reg, {.reg_ = rbx}});
+    INSERT_NEW_INSTRUCTION(add, {Reg, {.reg_ = rsp}}, {Immed, {8}});
 
     return true;
 }

@@ -28,8 +28,13 @@ void setRelJumps(x86_64::InstrArray* instr) {
             std::uint64_t nextAddr
                 = instr->data_[instr->oldAddrToNew_[cur.lhs_.qword_
                 + disasm::signatureSize]].absOffset_;
-            instr->data_[i].lhs_.qword_
-                = (std::int64_t)(nextAddr - cur.absOffset_ - JmpOffset);
+
+            if (cur.opcode_ == x86_64::call)
+                instr->data_[i].lhs_.qword_
+                    = (std::int64_t)(nextAddr - cur.absOffset_ - 1);
+            else
+                instr->data_[i].lhs_.qword_
+                    = (std::int64_t)(nextAddr - cur.absOffset_ - JmpOffset);
         }
     }
 }

@@ -33,7 +33,6 @@ using trans::instrMappings;
 
 enum DisasmStatus {
     Proceeding,
-    Halt,
     Error,
 };
 
@@ -41,7 +40,6 @@ const unsigned char OpcodeMask = 0x1f;
 
 // -------------------- Specific constants ---------------------------
 
-const unsigned char HaltInstruction = 0x10;
 const std::int64_t signature = 0x1156414223;
 
 using disasm::signatureSize;
@@ -71,9 +69,6 @@ DisasmStatus disassembleOnCurrent(buffer_file::Buffer* buffer,
 
     ir::Operand firstOp = {.type_ = ir::Operand::Empty};
     ir::Operand secondOp = {.type_ = ir::Operand::Empty};
-
-    if (opcode == HaltInstruction)
-        return Halt;
 
     if (opcode >= ARRAY_SIZE(instrMappings)) {
         std::fprintf(stderr, "Invalid opcode\n");
@@ -147,12 +142,10 @@ bool disassembleSPUCode(buffer_file::Buffer* buffer,
         return false;
     }
 
-    while (buffer->pos < buffer->len) {
+    while (buffer->buf[buffer->pos] != 0xbe) {
         switch (disassembleOnCurrent(buffer, output, ir)) {
         case Proceeding:
             break;
-        case Halt:
-            return true;
         case Error:
             return false;
         default:

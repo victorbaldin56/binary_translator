@@ -1,0 +1,909 @@
+
+./a.out:     file format elf64-x86-64
+
+
+Disassembly of section .plt:
+
+0000000000401000 <printf@plt-0x10>:
+  401000:	ff 35 ea 2f 00 00    	push   QWORD PTR [rip+0x2fea]        # 403ff0 <_GLOBAL_OFFSET_TABLE_+0x8>
+  401006:	ff 25 ec 2f 00 00    	jmp    QWORD PTR [rip+0x2fec]        # 403ff8 <_GLOBAL_OFFSET_TABLE_+0x10>
+  40100c:	0f 1f 40 00          	nop    DWORD PTR [rax+0x0]
+
+0000000000401010 <printf@plt>:
+  401010:	ff 25 ea 2f 00 00    	jmp    QWORD PTR [rip+0x2fea]        # 404000 <printf@GLIBC_2.2.5>
+  401016:	68 00 00 00 00       	push   0x0
+  40101b:	e9 e0 ff ff ff       	jmp    401000 <printf@plt-0x10>
+
+0000000000401020 <scanf@plt>:
+  401020:	ff 25 e2 2f 00 00    	jmp    QWORD PTR [rip+0x2fe2]        # 404008 <scanf@GLIBC_2.2.5>
+  401026:	68 01 00 00 00       	push   0x1
+  40102b:	e9 d0 ff ff ff       	jmp    401000 <printf@plt-0x10>
+
+Disassembly of section .text:
+
+0000000000401030 <_start>:
+
+_start:
+    default abs
+
+    ; in
+    mov rax, strict qword 0x1                               ; 00000000
+  401030:	48 b8 01 00 00 00 00 	movabs rax,0x1
+  401037:	00 00 00 
+    sub rsp, 0x8                                            ; 0000000a
+  40103a:	48 83 ec 08          	sub    rsp,0x8
+    mov rdi, fmt_string                                     ; 0000000e
+  40103e:	48 bf 00 20 40 00 00 	movabs rdi,0x402000
+  401045:	00 00 00 
+    mov rsi, rsp                                            ; 00000018
+  401048:	48 89 e6             	mov    rsi,rsp
+    sub rsp, 0x8                                            ; 0000001b
+  40104b:	48 83 ec 08          	sub    rsp,0x8
+    mov rbx, scanf                                          ; 0000001f
+  40104f:	48 bb 20 10 40 00 00 	movabs rbx,0x401020
+  401056:	00 00 00 
+    call rbx                                                ; 00000029
+  401059:	ff d3                	call   rbx
+    add rsp, 0x8                                            ; 0000002b
+  40105b:	48 83 c4 08          	add    rsp,0x8
+
+    ; pop rax
+    movsd xmm2, [rsp]                                       ; 0000002f
+  40105f:	f2 0f 10 14 24       	movsd  xmm2,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000034
+  401064:	48 83 c4 08          	add    rsp,0x8
+
+    ; in
+    mov rax, strict qword 0x1                               ; 00000038
+  401068:	48 b8 01 00 00 00 00 	movabs rax,0x1
+  40106f:	00 00 00 
+    sub rsp, 0x8                                            ; 00000042
+  401072:	48 83 ec 08          	sub    rsp,0x8
+    mov rdi, fmt_string                                     ; 00000046
+  401076:	48 bf 00 20 40 00 00 	movabs rdi,0x402000
+  40107d:	00 00 00 
+    mov rsi, rsp                                            ; 00000050
+  401080:	48 89 e6             	mov    rsi,rsp
+    sub rsp, 0x8                                            ; 00000053
+  401083:	48 83 ec 08          	sub    rsp,0x8
+    mov rbx, scanf                                          ; 00000057
+  401087:	48 bb 20 10 40 00 00 	movabs rbx,0x401020
+  40108e:	00 00 00 
+    call rbx                                                ; 00000061
+  401091:	ff d3                	call   rbx
+    add rsp, 0x8                                            ; 00000063
+  401093:	48 83 c4 08          	add    rsp,0x8
+
+    ; pop rbx
+    movsd xmm3, [rsp]                                       ; 00000067
+  401097:	f2 0f 10 1c 24       	movsd  xmm3,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 0000006c
+  40109c:	48 83 c4 08          	add    rsp,0x8
+
+    ; in
+    mov rax, strict qword 0x1                               ; 00000070
+  4010a0:	48 b8 01 00 00 00 00 	movabs rax,0x1
+  4010a7:	00 00 00 
+    sub rsp, 0x8                                            ; 0000007a
+  4010aa:	48 83 ec 08          	sub    rsp,0x8
+    mov rdi, fmt_string                                     ; 0000007e
+  4010ae:	48 bf 00 20 40 00 00 	movabs rdi,0x402000
+  4010b5:	00 00 00 
+    mov rsi, rsp                                            ; 00000088
+  4010b8:	48 89 e6             	mov    rsi,rsp
+    sub rsp, 0x8                                            ; 0000008b
+  4010bb:	48 83 ec 08          	sub    rsp,0x8
+    mov rbx, scanf                                          ; 0000008f
+  4010bf:	48 bb 20 10 40 00 00 	movabs rbx,0x401020
+  4010c6:	00 00 00 
+    call rbx                                                ; 00000099
+  4010c9:	ff d3                	call   rbx
+    add rsp, 0x8                                            ; 0000009b
+  4010cb:	48 83 c4 08          	add    rsp,0x8
+
+    ; pop rcx
+    movsd xmm4, [rsp]                                       ; 0000009f
+  4010cf:	f2 0f 10 24 24       	movsd  xmm4,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000000a4
+  4010d4:	48 83 c4 08          	add    rsp,0x8
+
+    ; push rax
+    sub rsp, 0x8                                            ; 000000a8
+  4010d8:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm2                                       ; 000000ac
+  4010dc:	f2 0f 11 14 24       	movsd  QWORD PTR [rsp],xmm2
+
+    ; push 0
+    mov rbx, strict qword 0x0                               ; 000000b1
+  4010e1:	48 bb 00 00 00 00 00 	movabs rbx,0x0
+  4010e8:	00 00 00 
+    push rbx                                                ; 000000bb
+  4010eb:	53                   	push   rbx
+
+    ; je 109
+    movsd xmm0, [rsp]                                       ; 000000bc
+  4010ec:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000000c1
+  4010f1:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 000000c5
+  4010f5:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000000ca
+  4010fa:	48 83 c4 08          	add    rsp,0x8
+    comisd xmm0, xmm1                                       ; 000000ce
+  4010fe:	66 0f 2f c1          	comisd xmm0,xmm1
+    je 0x1d4                                                ; 000000d2
+  401102:	0f 84 d0 01 00 00    	je     4012d8 <_start+0x2a8>
+
+    ; call 154
+    call 0x289                                              ; 000000d8
+  401108:	e8 85 02 00 00       	call   401392 <_start+0x362>
+
+    ; push rdx
+    sub rsp, 0x8                                            ; 000000dd
+  40110d:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm5                                       ; 000000e1
+  401111:	f2 0f 11 2c 24       	movsd  QWORD PTR [rsp],xmm5
+
+    ; push 0
+    mov rbx, strict qword 0x0                               ; 000000e6
+  401116:	48 bb 00 00 00 00 00 	movabs rbx,0x0
+  40111d:	00 00 00 
+    push rbx                                                ; 000000f0
+  401120:	53                   	push   rbx
+
+    ; ja 178
+    movsd xmm0, [rsp]                                       ; 000000f1
+  401121:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000000f6
+  401126:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 000000fa
+  40112a:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000000ff
+  40112f:	48 83 c4 08          	add    rsp,0x8
+    comisd xmm0, xmm1                                       ; 00000103
+  401133:	66 0f 2f c1          	comisd xmm0,xmm1
+    ja 0xfffffef6                                           ; 00000107
+  401137:	0f 87 f2 fe ff ff    	ja     40102f <scanf@plt+0xf>
+
+    ; push rdx
+    sub rsp, 0x8                                            ; 0000010d
+  40113d:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm5                                       ; 00000111
+  401141:	f2 0f 11 2c 24       	movsd  QWORD PTR [rsp],xmm5
+
+    ; sqrt
+    movsd xmm1, [rsp]                                       ; 00000116
+  401146:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    sqrtsd xmm0, xmm1                                       ; 0000011b
+  40114b:	f2 0f 51 c1          	sqrtsd xmm0,xmm1
+    movsd [rsp], xmm0                                       ; 0000011f
+  40114f:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; pop rdx
+    movsd xmm5, [rsp]                                       ; 00000124
+  401154:	f2 0f 10 2c 24       	movsd  xmm5,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000129
+  401159:	48 83 c4 08          	add    rsp,0x8
+
+    ; push rdx
+    sub rsp, 0x8                                            ; 0000012d
+  40115d:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm5                                       ; 00000131
+  401161:	f2 0f 11 2c 24       	movsd  QWORD PTR [rsp],xmm5
+
+    ; push rbx
+    sub rsp, 0x8                                            ; 00000136
+  401166:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm3                                       ; 0000013a
+  40116a:	f2 0f 11 1c 24       	movsd  QWORD PTR [rsp],xmm3
+
+    ; push -1
+    mov rbx, strict qword 0xbff0000000000000                ; 0000013f
+  40116f:	48 bb 00 00 00 00 00 	movabs rbx,0xbff0000000000000
+  401176:	00 f0 bf 
+    push rbx                                                ; 00000149
+  401179:	53                   	push   rbx
+
+    ; mul
+    movsd xmm0, [rsp]                                       ; 0000014a
+  40117a:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 0000014f
+  40117f:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 00000153
+  401183:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000158
+  401188:	48 83 c4 08          	add    rsp,0x8
+    mulsd xmm0, xmm1                                        ; 0000015c
+  40118c:	f2 0f 59 c1          	mulsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 00000160
+  401190:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 00000164
+  401194:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; pop rcx
+    movsd xmm4, [rsp]                                       ; 00000169
+  401199:	f2 0f 10 24 24       	movsd  xmm4,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 0000016e
+  40119e:	48 83 c4 08          	add    rsp,0x8
+
+    ; push rcx
+    sub rsp, 0x8                                            ; 00000172
+  4011a2:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm4                                       ; 00000176
+  4011a6:	f2 0f 11 24 24       	movsd  QWORD PTR [rsp],xmm4
+
+    ; add
+    movsd xmm0, [rsp]                                       ; 0000017b
+  4011ab:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000180
+  4011b0:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 00000184
+  4011b4:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000189
+  4011b9:	48 83 c4 08          	add    rsp,0x8
+    addsd xmm0, xmm1                                        ; 0000018d
+  4011bd:	f2 0f 58 c1          	addsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 00000191
+  4011c1:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 00000195
+  4011c5:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; push 2
+    mov rbx, strict qword 0x4000000000000000                ; 0000019a
+  4011ca:	48 bb 00 00 00 00 00 	movabs rbx,0x4000000000000000
+  4011d1:	00 00 40 
+    push rbx                                                ; 000001a4
+  4011d4:	53                   	push   rbx
+
+    ; push rax
+    sub rsp, 0x8                                            ; 000001a5
+  4011d5:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm2                                       ; 000001a9
+  4011d9:	f2 0f 11 14 24       	movsd  QWORD PTR [rsp],xmm2
+
+    ; mul
+    movsd xmm0, [rsp]                                       ; 000001ae
+  4011de:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000001b3
+  4011e3:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 000001b7
+  4011e7:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000001bc
+  4011ec:	48 83 c4 08          	add    rsp,0x8
+    mulsd xmm0, xmm1                                        ; 000001c0
+  4011f0:	f2 0f 59 c1          	mulsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 000001c4
+  4011f4:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 000001c8
+  4011f8:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; pop rax
+    movsd xmm2, [rsp]                                       ; 000001cd
+  4011fd:	f2 0f 10 14 24       	movsd  xmm2,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000001d2
+  401202:	48 83 c4 08          	add    rsp,0x8
+
+    ; push rax
+    sub rsp, 0x8                                            ; 000001d6
+  401206:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm2                                       ; 000001da
+  40120a:	f2 0f 11 14 24       	movsd  QWORD PTR [rsp],xmm2
+
+    ; div
+    movsd xmm0, [rsp]                                       ; 000001df
+  40120f:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000001e4
+  401214:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 000001e8
+  401218:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000001ed
+  40121d:	48 83 c4 08          	add    rsp,0x8
+    divsd xmm0, xmm1                                        ; 000001f1
+  401221:	f2 0f 5e c1          	divsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 000001f5
+  401225:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 000001f9
+  401229:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; out
+    mov rax, strict qword 0x1                               ; 000001fe
+  40122e:	48 b8 01 00 00 00 00 	movabs rax,0x1
+  401235:	00 00 00 
+    mov rdi, fmt_string                                     ; 00000208
+  401238:	48 bf 00 20 40 00 00 	movabs rdi,0x402000
+  40123f:	00 00 00 
+    movsd xmm0, [rsp]                                       ; 00000212
+  401242:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000217
+  401247:	48 83 c4 08          	add    rsp,0x8
+    mov rbx, printf                                         ; 0000021b
+  40124b:	48 bb 10 10 40 00 00 	movabs rbx,0x401010
+  401252:	00 00 00 
+    call rbx                                                ; 00000225
+  401255:	ff d3                	call   rbx
+
+    ; push rcx
+    sub rsp, 0x8                                            ; 00000227
+  401257:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm4                                       ; 0000022b
+  40125b:	f2 0f 11 24 24       	movsd  QWORD PTR [rsp],xmm4
+
+    ; push rdx
+    sub rsp, 0x8                                            ; 00000230
+  401260:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm5                                       ; 00000234
+  401264:	f2 0f 11 2c 24       	movsd  QWORD PTR [rsp],xmm5
+
+    ; sub
+    movsd xmm0, [rsp]                                       ; 00000239
+  401269:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 0000023e
+  40126e:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 00000242
+  401272:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000247
+  401277:	48 83 c4 08          	add    rsp,0x8
+    subsd xmm0, xmm1                                        ; 0000024b
+  40127b:	f2 0f 5c c1          	subsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 0000024f
+  40127f:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 00000253
+  401283:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; push rax
+    sub rsp, 0x8                                            ; 00000258
+  401288:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm2                                       ; 0000025c
+  40128c:	f2 0f 11 14 24       	movsd  QWORD PTR [rsp],xmm2
+
+    ; div
+    movsd xmm0, [rsp]                                       ; 00000261
+  401291:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000266
+  401296:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 0000026a
+  40129a:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 0000026f
+  40129f:	48 83 c4 08          	add    rsp,0x8
+    divsd xmm0, xmm1                                        ; 00000273
+  4012a3:	f2 0f 5e c1          	divsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 00000277
+  4012a7:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 0000027b
+  4012ab:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; out
+    mov rax, strict qword 0x1                               ; 00000280
+  4012b0:	48 b8 01 00 00 00 00 	movabs rax,0x1
+  4012b7:	00 00 00 
+    mov rdi, fmt_string                                     ; 0000028a
+  4012ba:	48 bf 00 20 40 00 00 	movabs rdi,0x402000
+  4012c1:	00 00 00 
+    movsd xmm0, [rsp]                                       ; 00000294
+  4012c4:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000299
+  4012c9:	48 83 c4 08          	add    rsp,0x8
+    mov rbx, printf                                         ; 0000029d
+  4012cd:	48 bb 10 10 40 00 00 	movabs rbx,0x401010
+  4012d4:	00 00 00 
+    call rbx                                                ; 000002a7
+  4012d7:	ff d3                	call   rbx
+
+    ; push rbx
+    sub rsp, 0x8                                            ; 000002a9
+  4012d9:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm3                                       ; 000002ad
+  4012dd:	f2 0f 11 1c 24       	movsd  QWORD PTR [rsp],xmm3
+
+    ; push 0
+    mov rbx, strict qword 0x0                               ; 000002b2
+  4012e2:	48 bb 00 00 00 00 00 	movabs rbx,0x0
+  4012e9:	00 00 00 
+    push rbx                                                ; 000002bc
+  4012ec:	53                   	push   rbx
+
+    ; je 178
+    movsd xmm0, [rsp]                                       ; 000002bd
+  4012ed:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000002c2
+  4012f2:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 000002c6
+  4012f6:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000002cb
+  4012fb:	48 83 c4 08          	add    rsp,0x8
+    comisd xmm0, xmm1                                       ; 000002cf
+  4012ff:	66 0f 2f c1          	comisd xmm0,xmm1
+    je 0xfffffd2a                                           ; 000002d3
+  401303:	0f 84 26 fd ff ff    	je     40102f <scanf@plt+0xf>
+
+    ; push 0
+    mov rbx, strict qword 0x0                               ; 000002d9
+  401309:	48 bb 00 00 00 00 00 	movabs rbx,0x0
+  401310:	00 00 00 
+    push rbx                                                ; 000002e3
+  401313:	53                   	push   rbx
+
+    ; push rcx
+    sub rsp, 0x8                                            ; 000002e4
+  401314:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm4                                       ; 000002e8
+  401318:	f2 0f 11 24 24       	movsd  QWORD PTR [rsp],xmm4
+
+    ; sub
+    movsd xmm0, [rsp]                                       ; 000002ed
+  40131d:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000002f2
+  401322:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 000002f6
+  401326:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000002fb
+  40132b:	48 83 c4 08          	add    rsp,0x8
+    subsd xmm0, xmm1                                        ; 000002ff
+  40132f:	f2 0f 5c c1          	subsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 00000303
+  401333:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 00000307
+  401337:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; push rbx
+    sub rsp, 0x8                                            ; 0000030c
+  40133c:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm3                                       ; 00000310
+  401340:	f2 0f 11 1c 24       	movsd  QWORD PTR [rsp],xmm3
+
+    ; div
+    movsd xmm0, [rsp]                                       ; 00000315
+  401345:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 0000031a
+  40134a:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 0000031e
+  40134e:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000323
+  401353:	48 83 c4 08          	add    rsp,0x8
+    divsd xmm0, xmm1                                        ; 00000327
+  401357:	f2 0f 5e c1          	divsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 0000032b
+  40135b:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 0000032f
+  40135f:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; out
+    mov rax, strict qword 0x1                               ; 00000334
+  401364:	48 b8 01 00 00 00 00 	movabs rax,0x1
+  40136b:	00 00 00 
+    mov rdi, fmt_string                                     ; 0000033e
+  40136e:	48 bf 00 20 40 00 00 	movabs rdi,0x402000
+  401375:	00 00 00 
+    movsd xmm0, [rsp]                                       ; 00000348
+  401378:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 0000034d
+  40137d:	48 83 c4 08          	add    rsp,0x8
+    mov rbx, printf                                         ; 00000351
+  401381:	48 bb 10 10 40 00 00 	movabs rbx,0x401010
+  401388:	00 00 00 
+    call rbx                                                ; 0000035b
+  40138b:	ff d3                	call   rbx
+
+    ; jmp 178
+    jmp 0xfffffca0                                          ; 0000035d
+  40138d:	e9 9c fc ff ff       	jmp    40102e <scanf@plt+0xe>
+
+    ; push rbx
+    sub rsp, 0x8                                            ; 00000362
+  401392:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm3                                       ; 00000366
+  401396:	f2 0f 11 1c 24       	movsd  QWORD PTR [rsp],xmm3
+
+    ; push rbx
+    sub rsp, 0x8                                            ; 0000036b
+  40139b:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm3                                       ; 0000036f
+  40139f:	f2 0f 11 1c 24       	movsd  QWORD PTR [rsp],xmm3
+
+    ; mul
+    movsd xmm0, [rsp]                                       ; 00000374
+  4013a4:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000379
+  4013a9:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 0000037d
+  4013ad:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000382
+  4013b2:	48 83 c4 08          	add    rsp,0x8
+    mulsd xmm0, xmm1                                        ; 00000386
+  4013b6:	f2 0f 59 c1          	mulsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 0000038a
+  4013ba:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 0000038e
+  4013be:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; push rax
+    sub rsp, 0x8                                            ; 00000393
+  4013c3:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm2                                       ; 00000397
+  4013c7:	f2 0f 11 14 24       	movsd  QWORD PTR [rsp],xmm2
+
+    ; push rcx
+    sub rsp, 0x8                                            ; 0000039c
+  4013cc:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm4                                       ; 000003a0
+  4013d0:	f2 0f 11 24 24       	movsd  QWORD PTR [rsp],xmm4
+
+    ; mul
+    movsd xmm0, [rsp]                                       ; 000003a5
+  4013d5:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000003aa
+  4013da:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 000003ae
+  4013de:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000003b3
+  4013e3:	48 83 c4 08          	add    rsp,0x8
+    mulsd xmm0, xmm1                                        ; 000003b7
+  4013e7:	f2 0f 59 c1          	mulsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 000003bb
+  4013eb:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 000003bf
+  4013ef:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; push 4
+    mov rbx, strict qword 0x4010000000000000                ; 000003c4
+  4013f4:	48 bb 00 00 00 00 00 	movabs rbx,0x4010000000000000
+  4013fb:	00 10 40 
+    push rbx                                                ; 000003ce
+  4013fe:	53                   	push   rbx
+
+    ; mul
+    movsd xmm0, [rsp]                                       ; 000003cf
+  4013ff:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000003d4
+  401404:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 000003d8
+  401408:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000003dd
+  40140d:	48 83 c4 08          	add    rsp,0x8
+    mulsd xmm0, xmm1                                        ; 000003e1
+  401411:	f2 0f 59 c1          	mulsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 000003e5
+  401415:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 000003e9
+  401419:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; sub
+    movsd xmm0, [rsp]                                       ; 000003ee
+  40141e:	f2 0f 10 04 24       	movsd  xmm0,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000003f3
+  401423:	48 83 c4 08          	add    rsp,0x8
+    movsd xmm1, [rsp]                                       ; 000003f7
+  401427:	f2 0f 10 0c 24       	movsd  xmm1,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 000003fc
+  40142c:	48 83 c4 08          	add    rsp,0x8
+    subsd xmm0, xmm1                                        ; 00000400
+  401430:	f2 0f 5c c1          	subsd  xmm0,xmm1
+    sub rsp, 0x8                                            ; 00000404
+  401434:	48 83 ec 08          	sub    rsp,0x8
+    movsd [rsp], xmm0                                       ; 00000408
+  401438:	f2 0f 11 04 24       	movsd  QWORD PTR [rsp],xmm0
+
+    ; pop rdx
+    movsd xmm5, [rsp]                                       ; 0000040d
+  40143d:	f2 0f 10 2c 24       	movsd  xmm5,QWORD PTR [rsp]
+    add rsp, 0x8                                            ; 00000412
+  401442:	48 83 c4 08          	add    rsp,0x8
+
+    ; ret
+    ret                                                     ; 00000416
+  401446:	c3                   	ret
+
+    mov rax, 0x3c
+  401447:	b8 3c 00 00 00       	mov    eax,0x3c
+    mov rdx, 0x0
+  40144c:	ba 00 00 00 00       	mov    edx,0x0
+    syscall
+  401451:	0f 05                	syscall
+Contents of the .eh_frame section (loaded from ./a.out):
+
+
+Contents of the .debug_aranges section (loaded from ./a.out):
+
+  Length:                   44
+  Version:                  2
+  Offset into .debug_info:  0
+  Pointer Size:             8
+  Segment Size:             0
+
+    Address            Length
+    0000000000401030 0000000000000423
+    0000000000000000 0000000000000000
+
+Contents of the .debug_info section (loaded from ./a.out):
+
+  Compilation Unit @ offset 0:
+   Length:        0x71 (32-bit)
+   Version:       3
+   Abbrev Offset: 0
+   Pointer Size:  8
+ <0><b>: Abbrev Number: 1 (DW_TAG_compile_unit)
+    <c>   DW_AT_low_pc      : 0x401030
+    <14>   DW_AT_high_pc     : 0x401453
+    <1c>   DW_AT_stmt_list   : 0
+    <20>   DW_AT_name        : sq.s
+    <25>   DW_AT_comp_dir    : /home/victor/Projects/binary_translator/tests/
+    <54>   DW_AT_producer    : NASM 2.16.01
+    <61>   DW_AT_language    : 32769	(MIPS assembler)
+ <1><63>: Abbrev Number: 2 (DW_TAG_subprogram)
+    <64>   DW_AT_low_pc      : 0x401030
+    <6c>   DW_AT_frame_base  : 0 (location list)
+ <1><70>: Abbrev Number: 0
+
+Contents of the .debug_abbrev section (loaded from ./a.out):
+
+  Number TAG (0)
+   1      DW_TAG_compile_unit    [has children]
+    DW_AT_low_pc       DW_FORM_addr
+    DW_AT_high_pc      DW_FORM_addr
+    DW_AT_stmt_list    DW_FORM_data4
+    DW_AT_name         DW_FORM_string
+    DW_AT_comp_dir     DW_FORM_string
+    DW_AT_producer     DW_FORM_string
+    DW_AT_language     DW_FORM_data2
+    DW_AT value: 0     DW_FORM value: 0
+   2      DW_TAG_subprogram    [no children]
+    DW_AT_low_pc       DW_FORM_addr
+    DW_AT_frame_base   DW_FORM_data4
+    DW_AT value: 0     DW_FORM value: 0
+
+Raw dump of debug contents of section .debug_line (loaded from ./a.out):
+
+  Offset:                      0
+  Length:                      268
+  DWARF Version:               3
+  Prologue Length:             27
+  Minimum Instruction Length:  1
+  Initial value of 'is_stmt':  1
+  Line Base:                   -5
+  Line Range:                  14
+  Opcode Base:                 13
+
+ Opcodes:
+  Opcode 1 has 0 args
+  Opcode 2 has 1 arg
+  Opcode 3 has 1 arg
+  Opcode 4 has 1 arg
+  Opcode 5 has 1 arg
+  Opcode 6 has 0 args
+  Opcode 7 has 0 args
+  Opcode 8 has 0 args
+  Opcode 9 has 1 arg
+  Opcode 10 has 0 args
+  Opcode 11 has 0 args
+  Opcode 12 has 1 arg
+
+ The Directory Table is empty.
+
+ The File Name Table (offset 0x1c):
+  Entry	Dir	Time	Size	Name
+  1	0	0	0	sq.s
+
+ Line Number Statements:
+  [0x00000025]  Extended opcode 2: set Address to 0x401030
+  [0x00000030]  Advance Line by 11 to 12
+  [0x00000032]  Copy
+  [0x00000033]  Special opcode 146: advance Address by 10 to 0x40103a and Line by 1 to 13
+  [0x00000034]  Special opcode 62: advance Address by 4 to 0x40103e and Line by 1 to 14
+  [0x00000035]  Special opcode 146: advance Address by 10 to 0x401048 and Line by 1 to 15
+  [0x00000036]  Special opcode 48: advance Address by 3 to 0x40104b and Line by 1 to 16
+  [0x00000037]  Special opcode 62: advance Address by 4 to 0x40104f and Line by 1 to 17
+  [0x00000038]  Special opcode 146: advance Address by 10 to 0x401059 and Line by 1 to 18
+  [0x00000039]  Special opcode 34: advance Address by 2 to 0x40105b and Line by 1 to 19
+  [0x0000003a]  Special opcode 64: advance Address by 4 to 0x40105f and Line by 3 to 22
+  [0x0000003b]  Special opcode 76: advance Address by 5 to 0x401064 and Line by 1 to 23
+  [0x0000003c]  Special opcode 64: advance Address by 4 to 0x401068 and Line by 3 to 26
+  [0x0000003d]  Special opcode 146: advance Address by 10 to 0x401072 and Line by 1 to 27
+  [0x0000003e]  Special opcode 62: advance Address by 4 to 0x401076 and Line by 1 to 28
+  [0x0000003f]  Special opcode 146: advance Address by 10 to 0x401080 and Line by 1 to 29
+  [0x00000040]  Special opcode 48: advance Address by 3 to 0x401083 and Line by 1 to 30
+  [0x00000041]  Special opcode 62: advance Address by 4 to 0x401087 and Line by 1 to 31
+  [0x00000042]  Special opcode 146: advance Address by 10 to 0x401091 and Line by 1 to 32
+  [0x00000043]  Special opcode 34: advance Address by 2 to 0x401093 and Line by 1 to 33
+  [0x00000044]  Special opcode 64: advance Address by 4 to 0x401097 and Line by 3 to 36
+  [0x00000045]  Special opcode 76: advance Address by 5 to 0x40109c and Line by 1 to 37
+  [0x00000046]  Special opcode 64: advance Address by 4 to 0x4010a0 and Line by 3 to 40
+  [0x00000047]  Special opcode 146: advance Address by 10 to 0x4010aa and Line by 1 to 41
+  [0x00000048]  Special opcode 62: advance Address by 4 to 0x4010ae and Line by 1 to 42
+  [0x00000049]  Special opcode 146: advance Address by 10 to 0x4010b8 and Line by 1 to 43
+  [0x0000004a]  Special opcode 48: advance Address by 3 to 0x4010bb and Line by 1 to 44
+  [0x0000004b]  Special opcode 62: advance Address by 4 to 0x4010bf and Line by 1 to 45
+  [0x0000004c]  Special opcode 146: advance Address by 10 to 0x4010c9 and Line by 1 to 46
+  [0x0000004d]  Special opcode 34: advance Address by 2 to 0x4010cb and Line by 1 to 47
+  [0x0000004e]  Special opcode 64: advance Address by 4 to 0x4010cf and Line by 3 to 50
+  [0x0000004f]  Special opcode 76: advance Address by 5 to 0x4010d4 and Line by 1 to 51
+  [0x00000050]  Special opcode 64: advance Address by 4 to 0x4010d8 and Line by 3 to 54
+  [0x00000051]  Special opcode 62: advance Address by 4 to 0x4010dc and Line by 1 to 55
+  [0x00000052]  Special opcode 78: advance Address by 5 to 0x4010e1 and Line by 3 to 58
+  [0x00000053]  Special opcode 146: advance Address by 10 to 0x4010eb and Line by 1 to 59
+  [0x00000054]  Special opcode 22: advance Address by 1 to 0x4010ec and Line by 3 to 62
+  [0x00000055]  Special opcode 76: advance Address by 5 to 0x4010f1 and Line by 1 to 63
+  [0x00000056]  Special opcode 62: advance Address by 4 to 0x4010f5 and Line by 1 to 64
+  [0x00000057]  Special opcode 76: advance Address by 5 to 0x4010fa and Line by 1 to 65
+  [0x00000058]  Special opcode 62: advance Address by 4 to 0x4010fe and Line by 1 to 66
+  [0x00000059]  Special opcode 62: advance Address by 4 to 0x401102 and Line by 1 to 67
+  [0x0000005a]  Special opcode 92: advance Address by 6 to 0x401108 and Line by 3 to 70
+  [0x0000005b]  Special opcode 78: advance Address by 5 to 0x40110d and Line by 3 to 73
+  [0x0000005c]  Special opcode 62: advance Address by 4 to 0x401111 and Line by 1 to 74
+  [0x0000005d]  Special opcode 78: advance Address by 5 to 0x401116 and Line by 3 to 77
+  [0x0000005e]  Special opcode 146: advance Address by 10 to 0x401120 and Line by 1 to 78
+  [0x0000005f]  Special opcode 22: advance Address by 1 to 0x401121 and Line by 3 to 81
+  [0x00000060]  Special opcode 76: advance Address by 5 to 0x401126 and Line by 1 to 82
+  [0x00000061]  Special opcode 62: advance Address by 4 to 0x40112a and Line by 1 to 83
+  [0x00000062]  Special opcode 76: advance Address by 5 to 0x40112f and Line by 1 to 84
+  [0x00000063]  Special opcode 62: advance Address by 4 to 0x401133 and Line by 1 to 85
+  [0x00000064]  Special opcode 62: advance Address by 4 to 0x401137 and Line by 1 to 86
+  [0x00000065]  Special opcode 92: advance Address by 6 to 0x40113d and Line by 3 to 89
+  [0x00000066]  Special opcode 62: advance Address by 4 to 0x401141 and Line by 1 to 90
+  [0x00000067]  Special opcode 78: advance Address by 5 to 0x401146 and Line by 3 to 93
+  [0x00000068]  Special opcode 76: advance Address by 5 to 0x40114b and Line by 1 to 94
+  [0x00000069]  Special opcode 62: advance Address by 4 to 0x40114f and Line by 1 to 95
+  [0x0000006a]  Special opcode 78: advance Address by 5 to 0x401154 and Line by 3 to 98
+  [0x0000006b]  Special opcode 76: advance Address by 5 to 0x401159 and Line by 1 to 99
+  [0x0000006c]  Special opcode 64: advance Address by 4 to 0x40115d and Line by 3 to 102
+  [0x0000006d]  Special opcode 62: advance Address by 4 to 0x401161 and Line by 1 to 103
+  [0x0000006e]  Special opcode 78: advance Address by 5 to 0x401166 and Line by 3 to 106
+  [0x0000006f]  Special opcode 62: advance Address by 4 to 0x40116a and Line by 1 to 107
+  [0x00000070]  Special opcode 78: advance Address by 5 to 0x40116f and Line by 3 to 110
+  [0x00000071]  Special opcode 146: advance Address by 10 to 0x401179 and Line by 1 to 111
+  [0x00000072]  Special opcode 22: advance Address by 1 to 0x40117a and Line by 3 to 114
+  [0x00000073]  Special opcode 76: advance Address by 5 to 0x40117f and Line by 1 to 115
+  [0x00000074]  Special opcode 62: advance Address by 4 to 0x401183 and Line by 1 to 116
+  [0x00000075]  Special opcode 76: advance Address by 5 to 0x401188 and Line by 1 to 117
+  [0x00000076]  Special opcode 62: advance Address by 4 to 0x40118c and Line by 1 to 118
+  [0x00000077]  Special opcode 62: advance Address by 4 to 0x401190 and Line by 1 to 119
+  [0x00000078]  Special opcode 62: advance Address by 4 to 0x401194 and Line by 1 to 120
+  [0x00000079]  Special opcode 78: advance Address by 5 to 0x401199 and Line by 3 to 123
+  [0x0000007a]  Special opcode 76: advance Address by 5 to 0x40119e and Line by 1 to 124
+  [0x0000007b]  Special opcode 64: advance Address by 4 to 0x4011a2 and Line by 3 to 127
+  [0x0000007c]  Special opcode 62: advance Address by 4 to 0x4011a6 and Line by 1 to 128
+  [0x0000007d]  Special opcode 78: advance Address by 5 to 0x4011ab and Line by 3 to 131
+  [0x0000007e]  Special opcode 76: advance Address by 5 to 0x4011b0 and Line by 1 to 132
+  [0x0000007f]  Special opcode 62: advance Address by 4 to 0x4011b4 and Line by 1 to 133
+  [0x00000080]  Special opcode 76: advance Address by 5 to 0x4011b9 and Line by 1 to 134
+  [0x00000081]  Special opcode 62: advance Address by 4 to 0x4011bd and Line by 1 to 135
+  [0x00000082]  Special opcode 62: advance Address by 4 to 0x4011c1 and Line by 1 to 136
+  [0x00000083]  Special opcode 62: advance Address by 4 to 0x4011c5 and Line by 1 to 137
+  [0x00000084]  Special opcode 78: advance Address by 5 to 0x4011ca and Line by 3 to 140
+  [0x00000085]  Special opcode 146: advance Address by 10 to 0x4011d4 and Line by 1 to 141
+  [0x00000086]  Special opcode 22: advance Address by 1 to 0x4011d5 and Line by 3 to 144
+  [0x00000087]  Special opcode 62: advance Address by 4 to 0x4011d9 and Line by 1 to 145
+  [0x00000088]  Special opcode 78: advance Address by 5 to 0x4011de and Line by 3 to 148
+  [0x00000089]  Special opcode 76: advance Address by 5 to 0x4011e3 and Line by 1 to 149
+  [0x0000008a]  Special opcode 62: advance Address by 4 to 0x4011e7 and Line by 1 to 150
+  [0x0000008b]  Special opcode 76: advance Address by 5 to 0x4011ec and Line by 1 to 151
+  [0x0000008c]  Special opcode 62: advance Address by 4 to 0x4011f0 and Line by 1 to 152
+  [0x0000008d]  Special opcode 62: advance Address by 4 to 0x4011f4 and Line by 1 to 153
+  [0x0000008e]  Special opcode 62: advance Address by 4 to 0x4011f8 and Line by 1 to 154
+  [0x0000008f]  Special opcode 78: advance Address by 5 to 0x4011fd and Line by 3 to 157
+  [0x00000090]  Special opcode 76: advance Address by 5 to 0x401202 and Line by 1 to 158
+  [0x00000091]  Special opcode 64: advance Address by 4 to 0x401206 and Line by 3 to 161
+  [0x00000092]  Special opcode 62: advance Address by 4 to 0x40120a and Line by 1 to 162
+  [0x00000093]  Special opcode 78: advance Address by 5 to 0x40120f and Line by 3 to 165
+  [0x00000094]  Special opcode 76: advance Address by 5 to 0x401214 and Line by 1 to 166
+  [0x00000095]  Special opcode 62: advance Address by 4 to 0x401218 and Line by 1 to 167
+  [0x00000096]  Special opcode 76: advance Address by 5 to 0x40121d and Line by 1 to 168
+  [0x00000097]  Special opcode 62: advance Address by 4 to 0x401221 and Line by 1 to 169
+  [0x00000098]  Special opcode 62: advance Address by 4 to 0x401225 and Line by 1 to 170
+  [0x00000099]  Special opcode 62: advance Address by 4 to 0x401229 and Line by 1 to 171
+  [0x0000009a]  Special opcode 78: advance Address by 5 to 0x40122e and Line by 3 to 174
+  [0x0000009b]  Special opcode 146: advance Address by 10 to 0x401238 and Line by 1 to 175
+  [0x0000009c]  Special opcode 146: advance Address by 10 to 0x401242 and Line by 1 to 176
+  [0x0000009d]  Special opcode 76: advance Address by 5 to 0x401247 and Line by 1 to 177
+  [0x0000009e]  Special opcode 62: advance Address by 4 to 0x40124b and Line by 1 to 178
+  [0x0000009f]  Special opcode 146: advance Address by 10 to 0x401255 and Line by 1 to 179
+  [0x000000a0]  Special opcode 36: advance Address by 2 to 0x401257 and Line by 3 to 182
+  [0x000000a1]  Special opcode 62: advance Address by 4 to 0x40125b and Line by 1 to 183
+  [0x000000a2]  Special opcode 78: advance Address by 5 to 0x401260 and Line by 3 to 186
+  [0x000000a3]  Special opcode 62: advance Address by 4 to 0x401264 and Line by 1 to 187
+  [0x000000a4]  Special opcode 78: advance Address by 5 to 0x401269 and Line by 3 to 190
+  [0x000000a5]  Special opcode 76: advance Address by 5 to 0x40126e and Line by 1 to 191
+  [0x000000a6]  Special opcode 62: advance Address by 4 to 0x401272 and Line by 1 to 192
+  [0x000000a7]  Special opcode 76: advance Address by 5 to 0x401277 and Line by 1 to 193
+  [0x000000a8]  Special opcode 62: advance Address by 4 to 0x40127b and Line by 1 to 194
+  [0x000000a9]  Special opcode 62: advance Address by 4 to 0x40127f and Line by 1 to 195
+  [0x000000aa]  Special opcode 62: advance Address by 4 to 0x401283 and Line by 1 to 196
+  [0x000000ab]  Special opcode 78: advance Address by 5 to 0x401288 and Line by 3 to 199
+  [0x000000ac]  Special opcode 62: advance Address by 4 to 0x40128c and Line by 1 to 200
+  [0x000000ad]  Special opcode 78: advance Address by 5 to 0x401291 and Line by 3 to 203
+  [0x000000ae]  Special opcode 76: advance Address by 5 to 0x401296 and Line by 1 to 204
+  [0x000000af]  Special opcode 62: advance Address by 4 to 0x40129a and Line by 1 to 205
+  [0x000000b0]  Special opcode 76: advance Address by 5 to 0x40129f and Line by 1 to 206
+  [0x000000b1]  Special opcode 62: advance Address by 4 to 0x4012a3 and Line by 1 to 207
+  [0x000000b2]  Special opcode 62: advance Address by 4 to 0x4012a7 and Line by 1 to 208
+  [0x000000b3]  Special opcode 62: advance Address by 4 to 0x4012ab and Line by 1 to 209
+  [0x000000b4]  Special opcode 78: advance Address by 5 to 0x4012b0 and Line by 3 to 212
+  [0x000000b5]  Special opcode 146: advance Address by 10 to 0x4012ba and Line by 1 to 213
+  [0x000000b6]  Special opcode 146: advance Address by 10 to 0x4012c4 and Line by 1 to 214
+  [0x000000b7]  Special opcode 76: advance Address by 5 to 0x4012c9 and Line by 1 to 215
+  [0x000000b8]  Special opcode 62: advance Address by 4 to 0x4012cd and Line by 1 to 216
+  [0x000000b9]  Special opcode 146: advance Address by 10 to 0x4012d7 and Line by 1 to 217
+  [0x000000ba]  Special opcode 36: advance Address by 2 to 0x4012d9 and Line by 3 to 220
+  [0x000000bb]  Special opcode 62: advance Address by 4 to 0x4012dd and Line by 1 to 221
+  [0x000000bc]  Special opcode 78: advance Address by 5 to 0x4012e2 and Line by 3 to 224
+  [0x000000bd]  Special opcode 146: advance Address by 10 to 0x4012ec and Line by 1 to 225
+  [0x000000be]  Special opcode 22: advance Address by 1 to 0x4012ed and Line by 3 to 228
+  [0x000000bf]  Special opcode 76: advance Address by 5 to 0x4012f2 and Line by 1 to 229
+  [0x000000c0]  Special opcode 62: advance Address by 4 to 0x4012f6 and Line by 1 to 230
+  [0x000000c1]  Special opcode 76: advance Address by 5 to 0x4012fb and Line by 1 to 231
+  [0x000000c2]  Special opcode 62: advance Address by 4 to 0x4012ff and Line by 1 to 232
+  [0x000000c3]  Special opcode 62: advance Address by 4 to 0x401303 and Line by 1 to 233
+  [0x000000c4]  Special opcode 92: advance Address by 6 to 0x401309 and Line by 3 to 236
+  [0x000000c5]  Special opcode 146: advance Address by 10 to 0x401313 and Line by 1 to 237
+  [0x000000c6]  Special opcode 22: advance Address by 1 to 0x401314 and Line by 3 to 240
+  [0x000000c7]  Special opcode 62: advance Address by 4 to 0x401318 and Line by 1 to 241
+  [0x000000c8]  Special opcode 78: advance Address by 5 to 0x40131d and Line by 3 to 244
+  [0x000000c9]  Special opcode 76: advance Address by 5 to 0x401322 and Line by 1 to 245
+  [0x000000ca]  Special opcode 62: advance Address by 4 to 0x401326 and Line by 1 to 246
+  [0x000000cb]  Special opcode 76: advance Address by 5 to 0x40132b and Line by 1 to 247
+  [0x000000cc]  Special opcode 62: advance Address by 4 to 0x40132f and Line by 1 to 248
+  [0x000000cd]  Special opcode 62: advance Address by 4 to 0x401333 and Line by 1 to 249
+  [0x000000ce]  Special opcode 62: advance Address by 4 to 0x401337 and Line by 1 to 250
+  [0x000000cf]  Special opcode 78: advance Address by 5 to 0x40133c and Line by 3 to 253
+  [0x000000d0]  Special opcode 62: advance Address by 4 to 0x401340 and Line by 1 to 254
+  [0x000000d1]  Special opcode 78: advance Address by 5 to 0x401345 and Line by 3 to 257
+  [0x000000d2]  Special opcode 76: advance Address by 5 to 0x40134a and Line by 1 to 258
+  [0x000000d3]  Special opcode 62: advance Address by 4 to 0x40134e and Line by 1 to 259
+  [0x000000d4]  Special opcode 76: advance Address by 5 to 0x401353 and Line by 1 to 260
+  [0x000000d5]  Special opcode 62: advance Address by 4 to 0x401357 and Line by 1 to 261
+  [0x000000d6]  Special opcode 62: advance Address by 4 to 0x40135b and Line by 1 to 262
+  [0x000000d7]  Special opcode 62: advance Address by 4 to 0x40135f and Line by 1 to 263
+  [0x000000d8]  Special opcode 78: advance Address by 5 to 0x401364 and Line by 3 to 266
+  [0x000000d9]  Special opcode 146: advance Address by 10 to 0x40136e and Line by 1 to 267
+  [0x000000da]  Special opcode 146: advance Address by 10 to 0x401378 and Line by 1 to 268
+  [0x000000db]  Special opcode 76: advance Address by 5 to 0x40137d and Line by 1 to 269
+  [0x000000dc]  Special opcode 62: advance Address by 4 to 0x401381 and Line by 1 to 270
+  [0x000000dd]  Special opcode 146: advance Address by 10 to 0x40138b and Line by 1 to 271
+  [0x000000de]  Special opcode 36: advance Address by 2 to 0x40138d and Line by 3 to 274
+  [0x000000df]  Special opcode 78: advance Address by 5 to 0x401392 and Line by 3 to 277
+  [0x000000e0]  Special opcode 62: advance Address by 4 to 0x401396 and Line by 1 to 278
+  [0x000000e1]  Special opcode 78: advance Address by 5 to 0x40139b and Line by 3 to 281
+  [0x000000e2]  Special opcode 62: advance Address by 4 to 0x40139f and Line by 1 to 282
+  [0x000000e3]  Special opcode 78: advance Address by 5 to 0x4013a4 and Line by 3 to 285
+  [0x000000e4]  Special opcode 76: advance Address by 5 to 0x4013a9 and Line by 1 to 286
+  [0x000000e5]  Special opcode 62: advance Address by 4 to 0x4013ad and Line by 1 to 287
+  [0x000000e6]  Special opcode 76: advance Address by 5 to 0x4013b2 and Line by 1 to 288
+  [0x000000e7]  Special opcode 62: advance Address by 4 to 0x4013b6 and Line by 1 to 289
+  [0x000000e8]  Special opcode 62: advance Address by 4 to 0x4013ba and Line by 1 to 290
+  [0x000000e9]  Special opcode 62: advance Address by 4 to 0x4013be and Line by 1 to 291
+  [0x000000ea]  Special opcode 78: advance Address by 5 to 0x4013c3 and Line by 3 to 294
+  [0x000000eb]  Special opcode 62: advance Address by 4 to 0x4013c7 and Line by 1 to 295
+  [0x000000ec]  Special opcode 78: advance Address by 5 to 0x4013cc and Line by 3 to 298
+  [0x000000ed]  Special opcode 62: advance Address by 4 to 0x4013d0 and Line by 1 to 299
+  [0x000000ee]  Special opcode 78: advance Address by 5 to 0x4013d5 and Line by 3 to 302
+  [0x000000ef]  Special opcode 76: advance Address by 5 to 0x4013da and Line by 1 to 303
+  [0x000000f0]  Special opcode 62: advance Address by 4 to 0x4013de and Line by 1 to 304
+  [0x000000f1]  Special opcode 76: advance Address by 5 to 0x4013e3 and Line by 1 to 305
+  [0x000000f2]  Special opcode 62: advance Address by 4 to 0x4013e7 and Line by 1 to 306
+  [0x000000f3]  Special opcode 62: advance Address by 4 to 0x4013eb and Line by 1 to 307
+  [0x000000f4]  Special opcode 62: advance Address by 4 to 0x4013ef and Line by 1 to 308
+  [0x000000f5]  Special opcode 78: advance Address by 5 to 0x4013f4 and Line by 3 to 311
+  [0x000000f6]  Special opcode 146: advance Address by 10 to 0x4013fe and Line by 1 to 312
+  [0x000000f7]  Special opcode 22: advance Address by 1 to 0x4013ff and Line by 3 to 315
+  [0x000000f8]  Special opcode 76: advance Address by 5 to 0x401404 and Line by 1 to 316
+  [0x000000f9]  Special opcode 62: advance Address by 4 to 0x401408 and Line by 1 to 317
+  [0x000000fa]  Special opcode 76: advance Address by 5 to 0x40140d and Line by 1 to 318
+  [0x000000fb]  Special opcode 62: advance Address by 4 to 0x401411 and Line by 1 to 319
+  [0x000000fc]  Special opcode 62: advance Address by 4 to 0x401415 and Line by 1 to 320
+  [0x000000fd]  Special opcode 62: advance Address by 4 to 0x401419 and Line by 1 to 321
+  [0x000000fe]  Special opcode 78: advance Address by 5 to 0x40141e and Line by 3 to 324
+  [0x000000ff]  Special opcode 76: advance Address by 5 to 0x401423 and Line by 1 to 325
+  [0x00000100]  Special opcode 62: advance Address by 4 to 0x401427 and Line by 1 to 326
+  [0x00000101]  Special opcode 76: advance Address by 5 to 0x40142c and Line by 1 to 327
+  [0x00000102]  Special opcode 62: advance Address by 4 to 0x401430 and Line by 1 to 328
+  [0x00000103]  Special opcode 62: advance Address by 4 to 0x401434 and Line by 1 to 329
+  [0x00000104]  Special opcode 62: advance Address by 4 to 0x401438 and Line by 1 to 330
+  [0x00000105]  Special opcode 78: advance Address by 5 to 0x40143d and Line by 3 to 333
+  [0x00000106]  Special opcode 76: advance Address by 5 to 0x401442 and Line by 1 to 334
+  [0x00000107]  Special opcode 64: advance Address by 4 to 0x401446 and Line by 3 to 337
+  [0x00000108]  Special opcode 21: advance Address by 1 to 0x401447 and Line by 2 to 339
+  [0x00000109]  Special opcode 76: advance Address by 5 to 0x40144c and Line by 1 to 340
+  [0x0000010a]  Special opcode 76: advance Address by 5 to 0x401451 and Line by 1 to 341
+  [0x0000010b]  Advance PC by 2 to 0x401453
+  [0x0000010d]  Extended opcode 1: End of Sequence
+
+

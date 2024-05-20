@@ -147,11 +147,11 @@ bool listing::dumpAsm(x86_64::InstrArray* arr, const char* file,
         "extern printf\n"
         "extern scanf\n"
         "\n"
-        "global _start\n"
+        "global main\n"
         "\n"
         "section .text\n"
         "\n"
-        "_start:\n"
+        "main:\n"
         "    default abs\n");
 
     for (std::size_t i = 0; i < arr->sz_; ++i)
@@ -160,15 +160,8 @@ bool listing::dumpAsm(x86_64::InstrArray* arr, const char* file,
     std::fprintf(
         fp,
         "\n"
-        "    mov rax, 0x3c\n"
-        "    mov rdx, 0x0\n"
-        "    syscall\n");
-
-    std::fprintf(
-        fp,
-        "\n"
         "section .rodata\n"
-        "fmt_string db '%%lg'\n");
+        "fmt_string db '%%lg '\n");
 
     std::fclose(fp);
 

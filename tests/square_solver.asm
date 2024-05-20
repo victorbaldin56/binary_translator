@@ -1,36 +1,3 @@
-jmp main
-
-; Linear equation case
-Linear:
-    push rbx
-    push 0
-    je halt ; if b == 0
-
-    push 0
-    push rcx
-    sub
-
-    push rbx
-    div
-    out
-    jmp halt
-
-Discr: ; counting D = b^2 - 4*a*c
-    push rbx
-    push rbx
-    mul
-
-    push rax
-    push rcx
-    mul
-
-    push 4
-    mul
-
-    sub
-
-    ret
-
 main:
     in
     pop rax
@@ -46,8 +13,6 @@ main:
     je Linear
 
     call Discr
-
-    pop rdx
 
     push rdx
     push 0
@@ -88,6 +53,39 @@ main:
     div
 
     out
+    jmp halt
+
+; Linear equation case
+Linear:
+    push rbx
+    push 0
+    je halt ; if b == 0
+
+    push 0
+    push rcx
+    sub
+
+    push rbx
+    div
+    out
+    jmp halt
+
+Discr: ; counting D = b^2 - 4*a*c
+    push rbx
+    push rbx
+    mul
+
+    push rax
+    push rcx
+    mul
+
+    push 4
+    mul
+
+    sub
+    pop rdx
+
+    ret
 
 halt:
     hlt

@@ -1,4 +1,5 @@
 #!/bin/bash
 
+../Debug/trans -S sq.s sq.spu
 nasm -f elf64 -l sq.lst -F dwarf sq.s
-ld -dynamic-linker /lib64/ld-linux-x86-64.so.2 sq.o -lc
+clang sq.o

@@ -11,9 +11,11 @@
 
 DEF_X86_REG(rax)
 DEF_X86_REG(rbx)
+DEF_X86_REG(rdx)
 DEF_X86_REG(rdi)
 DEF_X86_REG(rsi)
 DEF_X86_REG(rsp)
+DEF_X86_REG(rbp)
 
 DEF_X86_REG(xmm0)
 DEF_X86_REG(xmm1)

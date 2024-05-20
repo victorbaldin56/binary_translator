@@ -49,7 +49,7 @@ static const InstrMap instrMappings[] = {
     DEF_INSTR_MAPPING(jb  , Immed | Reg),
     DEF_INSTR_MAPPING(je  , Immed | Reg),
     DEF_INSTR_MAPPING(call, Immed | Reg),
-    {"hlt", 0},
+    DEF_INSTR_MAPPING(hlt,            0),
     DEF_INSTR_MAPPING(ret ,           0)};
 
 bool translate(Arguments args);
