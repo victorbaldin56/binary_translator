@@ -11,7 +11,8 @@
 #include <cstdlib>
 #include <cstring>
 
-extern const char scanf_fmt[] = "%lg ";
+extern const char scanf_fmt[] = "%lg";
+extern const char printf_fmt[] = "%lg\n";
 
 #define DEF(func)                                                             \
 bool x86_64::translate_##func(InstrArray* arr,                                \
@@ -64,7 +65,7 @@ DEF(out) {
     INSERT_NEW_INSTRUCTION(nop);
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rax}}, {Immed, {1}});
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rdi}},
-                           {Immed, {(std::int64_t)scanf_fmt}});
+                           {Immed, {(std::int64_t)printf_fmt}});
     INSERT_NEW_INSTRUCTION(movsd, {Reg, {.reg_ = xmm0}}, {Mem, {.reg_ = rsp}});
 
     INSERT_NEW_INSTRUCTION(mov, {Reg, {.reg_ = rbx}},

@@ -172,7 +172,6 @@ DEF(sqrtsd) {
 }
 
 DEF(movsd) {
-    // TODO
     const int movsdSize = 5;
     std::int64_t opcode = 0x2400000ff2;
     //                        ^ ^
@@ -228,8 +227,8 @@ void emitter::emitCode(x86_64::InstrArray* instr, void* codeBuf) {
     assert(codeBuf);
 
     char* bufPtr = (char*)codeBuf;
-    *bufPtr = (char)0xcc;   // for debugging
-    ++bufPtr;
+    // *bufPtr = (char)0xcc;   // for debugging
+    // ++bufPtr;
     for (std::size_t i = 0; i < instr->sz_; ++i) {
         emitInstruction(instr->data_[i], &bufPtr);
     }

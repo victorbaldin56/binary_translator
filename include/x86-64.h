@@ -15,6 +15,7 @@
 #include "ir.h"
 
 extern const char scanf_fmt[];
+extern const char printf_fmt[];
 
 namespace x86_64 {
 
@@ -28,7 +29,7 @@ enum OperandType {
 #define DEF_X86_REG(reg) reg,
 
 enum Register {
-#include "x86_registers.h"
+    #include "x86_registers.h"
 };
 
 #undef DEF_X86_REG
@@ -36,7 +37,7 @@ enum Register {
 #define DEF_X86_INSTRUCTION(instr) instr,
 
 enum Opcode {
-#include "x86_instr.h"
+    #include "x86_instr.h"
 };
 
 #undef DEF_X86_INSTRUCTION
