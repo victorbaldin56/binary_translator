@@ -160,7 +160,6 @@ bool disassembleSPUCode(buffer_file::Buffer* buffer,
 
 ir::IR* disasm::disassemble(trans::Arguments args, std::FILE* output) {
     assert(args.inputFile);
-    assert(args.asmFile);
 
     buffer_file::Buffer* inputBuffer =
         buffer_file::createBuffer(args.inputFile);

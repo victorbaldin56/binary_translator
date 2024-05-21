@@ -12,7 +12,7 @@
 
 namespace jit {
 
-bool run(x86_64::InstrArray* instr);
+int run(x86_64::InstrArray* instr);
 
 }
 

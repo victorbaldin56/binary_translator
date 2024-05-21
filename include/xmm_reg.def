@@ -1,0 +1,6 @@
+DEF_XMM(xmm0, 0x04)
+DEF_XMM(xmm1, 0x0c)
+DEF_XMM(xmm2, 0x14)
+DEF_XMM(xmm3, 0x1c)
+DEF_XMM(xmm4, 0x24)
+DEF_XMM(xmm5, 0x2c)

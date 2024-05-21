@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include <cstring>
 
-extern const char scanf_fmt[] = "%lg";
+extern const char scanf_fmt[] = "%lg ";
 
 #define DEF(func)                                                             \
 bool x86_64::translate_##func(InstrArray* arr,                                \

@@ -17,6 +17,8 @@ add_executable(
     src/x86-64.cpp
     src/ir.cpp
     src/asm_listing.cpp
+    src/jit.cpp
+    src/x86_emitter.cpp
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/include)

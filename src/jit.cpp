@@ -10,18 +10,19 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
+#include <cstdio>
 #include <cstdlib>
 
 #include "x86_emitter.h"
 
-typedef void MemExecutor();
+typedef int MemExecutor();
 
-bool jit::run(x86_64::InstrArray* instr) {
+int jit::run(x86_64::InstrArray* instr) {
 
 #define HANDLE_ERROR(msg)                                                     \
     do {                                                                      \
         std::fprintf(stderr, msg);                                            \
-        success = false;                                                      \
+        retCode = -1;                                                         \
         goto cleanup;                                                         \
     } while (0)
 
@@ -30,8 +31,9 @@ bool jit::run(x86_64::InstrArray* instr) {
     std::size_t pageSize = (std::size_t)sysconf(_SC_PAGESIZE);
     std::size_t numPages = instr->curAddr_ / pageSize + 1;
     std::size_t bufSize = numPages * pageSize;
+    std::FILE* out = 0;
 
-    bool success = true;
+    int retCode = 0;
 
     void* jitBuf = aligned_alloc(pageSize, bufSize);
     if (!jitBuf)
@@ -43,12 +45,15 @@ bool jit::run(x86_64::InstrArray* instr) {
     if (mprotect(jitBuf, bufSize, PROT_READ | PROT_EXEC) == -1)
         HANDLE_ERROR("mprotect failed\n");
 
+    out = std::fopen("jitbuf.dump", "wb");
+    fwrite(jitBuf, 1, bufSize, out);
+
     // Leap into the unknown...
-    ((MemExecutor*)jitBuf)();
+    retCode = ((MemExecutor*)jitBuf)();
 
 #undef HANDLE_ERROR
 
 cleanup:
     std::free(jitBuf);
-    return success;
+    return retCode;
 }

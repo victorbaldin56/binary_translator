@@ -11,6 +11,7 @@
 
 #include "asm_listing.h"
 #include "disasm.h"
+#include "jit.h"
 #include "x86-64.h"
 
 namespace {
@@ -54,14 +55,17 @@ void translateToX86(ir::IR* ir, trans::Arguments args, std::FILE* disasm) {
 
     setRelJumps(&instr);
 
-    listing::dumpAsm(&instr, args.asmFile, disasm);
+    if (args.asmFile)
+        listing::dumpAsm(&instr, args.asmFile, disasm);
+
+    jit::run(&instr);
     x86_64::destroyInstrArray(&instr);
 }
 
 }
 
 bool trans::translate(Arguments args) {
-    assert(args.inputFile && args.asmFile);
+    assert(args.inputFile);
 
     // To store SPU code disassembly and annotate output x86 assembly.
     std::FILE* tmpDisasm = std::tmpfile();
